@@ -1,0 +1,1840 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>U8 练习册 · 答案与批注版</title>
+<style>
+  :root{
+    --ink:#1f2328; --ink2:#4b5563; --ink3:#8a8f99;
+    --paper:#f6f4ee; --card:#ffffff; --line:#e5e1d6;
+    --mint:#0f9d76; --mintbg:#edfaf4; --mintline:#9fe3cb;
+    --blue:#2f6fed; --amber:#c47b0a; --red:#c2410c;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:"Songti SC","STSong","Noto Serif CJK SC","Source Han Serif SC","SimSun",serif;
+    font-size:16.5px; line-height:1.95; -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:920px;margin:0 auto;padding:0 18px 80px}
+
+  /* ===== 顶栏 ===== */
+  header{position:sticky;top:0;z-index:30;backdrop-filter:blur(10px);background:rgba(246,244,238,.92);border-bottom:1px solid var(--line)}
+  .hbar{max-width:920px;margin:0 auto;padding:12px 18px 10px}
+  .title{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+  .title h1{margin:0;font-size:20px;letter-spacing:.02em;font-family:"PingFang SC","Microsoft YaHei",sans-serif;font-weight:600}
+  .title .sub{font-size:12.5px;color:var(--ink3);font-family:"PingFang SC","Microsoft YaHei",sans-serif}
+  .tools{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;align-items:center}
+  button{
+    font-family:"PingFang SC","Microsoft YaHei",sans-serif;font-size:13.5px;cursor:pointer;
+    border-radius:999px;border:1px solid var(--line);background:#fff;color:var(--ink);
+    padding:7px 15px;transition:.18s;line-height:1.3;
+  }
+  button:hover{border-color:#c9c2b2;background:#fffdf8}
+  button.primary{background:var(--mint);border-color:var(--mint);color:#fff;box-shadow:0 2px 8px rgba(15,157,118,.22)}
+  button.primary:hover{background:#0c8a68}
+  button.ghost{background:transparent}
+  .stat{font-size:12.5px;color:var(--ink3);font-family:"PingFang SC","Microsoft YaHei",sans-serif;margin-left:2px}
+
+  nav.lessons{display:flex;gap:8px;overflow-x:auto;padding:8px 18px 10px;max-width:920px;margin:0 auto;scrollbar-width:none}
+  nav.lessons::-webkit-scrollbar{display:none}
+  nav.lessons a{
+    flex:0 0 auto;font-family:"PingFang SC","Microsoft YaHei",sans-serif;font-size:13px;
+    padding:5px 13px;border-radius:999px;border:1px solid var(--line);background:#fff;
+    color:var(--ink2);text-decoration:none;white-space:nowrap;
+  }
+  nav.lessons a:hover{border-color:var(--mint);color:var(--mint)}
+
+  /* ===== 课次标题 ===== */
+  .lesson{margin-top:34px}
+  .lhead{display:flex;align-items:flex-end;gap:12px;border-bottom:2px solid var(--ink);padding-bottom:8px}
+  .lnum{font-family:"PingFang SC","Microsoft YaHei",sans-serif;font-size:12px;color:#fff;background:var(--ink);border-radius:6px;padding:2px 9px;letter-spacing:.06em}
+  .lhead h2{margin:0;font-size:21px;font-weight:600;letter-spacing:.02em}
+  .lhead .tag2{font-size:12.5px;color:var(--ink3);font-family:"PingFang SC","Microsoft YaHei",sans-serif;margin-left:auto}
+  .part{margin:26px 0 4px;font-size:14px;color:var(--ink2);font-family:"PingFang SC","Microsoft YaHei",sans-serif;letter-spacing:.08em}
+  .part::before{content:"";display:inline-block;width:16px;height:2px;background:var(--amber);vertical-align:4px;margin-right:8px}
+
+  /* ===== 题目卡 ===== */
+  .q{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 20px 14px;margin:14px 0;position:relative}
+  .q:hover{border-color:#d9d3c6}
+  .qhead{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+  .num{font-family:"PingFang SC","Microsoft YaHei",sans-serif;font-size:12px;font-weight:600;color:#fff;background:var(--blue);border-radius:6px;min-width:24px;text-align:center;padding:1px 7px;letter-spacing:.03em}
+  .kind{font-family:"PingFang SC","Microsoft YaHei",sans-serif;font-size:11.5px;color:var(--ink3);border:1px solid var(--line);border-radius:999px;padding:1px 9px;background:#faf9f5}
+  .btnans{margin-left:auto;font-size:12px;padding:3px 12px;border-radius:999px;border:1px dashed var(--mintline);background:var(--mintbg);color:var(--mint);font-weight:500}
+  .btnans:hover{background:#e2f7ee}
+
+  .stem{margin-top:2px;text-align:justify}
+  .stem .bk{color:var(--ink3)}
+  .opts{display:grid;grid-template-columns:1fr 1fr;gap:1px 22px;margin-top:6px}
+  .opts.wide{grid-template-columns:1fr}
+  .opt{display:flex;gap:8px}
+  .opt b{font-weight:600;font-family:"PingFang SC","Microsoft YaHei",sans-serif;color:var(--ink2)}
+  .opt.correct{color:var(--mint)}
+  .opt.correct b{color:var(--mint)}
+  .quote{background:#fbfaf6;border-left:2px solid #e3dfd2;padding:6px 14px;margin:8px 0;font-size:15px;color:#3f4652}
+  .passage{background:#fbfaf6;border:1px solid #efece2;border-radius:10px;padding:10px 16px;margin:8px 0;font-size:15px;color:#3f4652}
+  .passage p{margin:6px 0}
+  .passage .ttl{text-align:center;font-weight:600;letter-spacing:.15em;color:var(--ink)}
+
+  /* ===== 题干内嵌答案 ===== */
+  .inline-ans{
+    display:none;background:linear-gradient(transparent 62%, #c9f2e2 62%);
+    color:#075e47;font-weight:600;padding:0 2px;border-radius:2px;
+  }
+  body.notes-on .inline-ans{}
+
+  /* ===== 答案块 ===== */
+  .ans{display:none;margin-top:12px;padding:12px 15px 11px;border-radius:11px;background:var(--mintbg);border:1px solid var(--mintline);border-left:4px solid var(--mint)}
+  .ans.show{display:block;animation:pop .18s ease-out}
+  @keyframes pop{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+  .alab{display:inline-block;font-family:"PingFang SC","Microsoft YaHei",sans-serif;font-size:11px;letter-spacing:.12em;color:#fff;background:var(--mint);border-radius:5px;padding:1px 8px;margin-bottom:6px}
+  .atext{color:#0b3f31;font-weight:600;font-size:16px;line-height:1.85}
+  .atext p{margin:2px 0}
+  .atext .alt{font-weight:400;color:#356e5d}
+  .anote{margin-top:8px;padding-top:8px;border-top:1px dashed var(--mintline);font-size:14px;line-height:1.8;color:#4a6a60;display:none}
+  body.notes-on .anote{display:block}
+  .anote b{color:var(--amber);font-family:"PingFang SC","Microsoft YaHei",sans-serif;font-size:12px;letter-spacing:.06em;margin-right:4px}
+
+  /* ===== 工具栏说明 ===== */
+  .hintbar{max-width:920px;margin:16px auto 0;padding:0 18px}
+  .hint{background:#fffdf6;border:1px dashed #e8dfc6;border-radius:12px;padding:10px 16px;font-size:13.5px;color:#6b5f42;font-family:"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.7}
+  .hint strong{color:#a16207}
+
+  footer{max-width:920px;margin:60px auto 0;padding:0 18px;color:var(--ink3);font-size:12.5px;font-family:"PingFang SC","Microsoft YaHei",sans-serif;border-top:1px solid var(--line);padding-top:14px}
+
+  @media (max-width:620px){
+    .opts{grid-template-columns:1fr}
+    body{font-size:16px}
+    .lhead h2{font-size:18px}
+  }
+  @media print{
+    header,nav.lessons,.btnans{display:none}
+    .ans{display:block;break-inside:avoid}
+    body{background:#fff}
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="hbar">
+    <div class="title">
+      <h1>U8 练习册 · 答案与批注版</h1>
+      <span class="sub">《秋天的怀念》《散步》《世说新语》二则《从百草园到三味书屋》《论语》十二章《诫子书》</span>
+    </div>
+    <div class="tools">
+      <button class="primary" data-act="all">一键显示全部答案</button>
+      <button data-act="none">收起全部答案</button>
+      <button id="noteBtn" data-act="notes">隐藏批注</button>
+      <span class="stat" id="stat">已显示 0 题答案</span>
+    </div>
+  </div>
+  <nav class="lessons">
+    <a href="#L1">1 秋天的怀念</a>
+    <a href="#L2">2 散步</a>
+    <a href="#L3">3 世说新语二则</a>
+    <a href="#L4">4 从百草园到三味书屋</a>
+    <a href="#L5">5 论语十二章</a>
+    <a href="#L6">6 诫子书</a>
+  </nav>
+</header>
+
+<div class="wrap">
+<div class="hintbar">
+  <div class="hint">
+    <strong>用法：</strong>每题右侧「看答案」单独显示；顶部「一键显示全部答案」全部展开；「批注」即每题答案下的考点与易错提醒（默认显示，可一键隐藏）。<br>
+    答案直接写在题目下方（绿色块＝写在题目上的答案），蓝色虚线圈的选项＝正确选项。
+  </div>
+</div>
+<!-- ============ L1 秋天的怀念 ============ -->
+<section class="lesson" id="L1">
+  <div class="lhead">
+    <span class="lnum">UNIT 8 · 01</span>
+    <h2>《秋天的怀念》课后作业单</h2>
+    <span class="tag2">史铁生 · 叙事散文</span>
+  </div>
+
+  <div class="part">第一部分　积累与运用</div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">1</span><span class="kind">字音 · 字形</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">下列加点字词的注音、字形完全正确的一项是（　）</div>
+    <div class="opts">
+      <div class="opt"><b>A．</b><span>央求(āng)　沉寂(jì)　待弄(shì)</span></div>
+      <div class="opt"><b>B．</b><span>捶打(chuí)　暴怒(nù)　絮叨(xù tɑo)</span></div>
+      <div class="opt correct"><b>C．</b><span>淡雅(yǎ)　憔悴(cuì)　烂漫(màn)</span></div>
+      <div class="opt"><b>D．</b><span>仿膳(shàn)　砸碎(zá)　决别(jué)</span></div>
+    </div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext"><p><b>C</b>　淡雅(yǎ)、憔悴(cuì)、烂漫(màn)　三项注音字形全对。</p></div>
+      <div class="anote"><b>批注</b>A 项"央求"应读 yāng（缺声母），"待弄"应为<b>侍弄</b>；B 项"絮叨"应读 xù dāo，且"捶打"的"捶"字形对但整组错在"絮叨"；D 项"决别"应为<b>诀别</b>。易错点：形近字"侍/待""诀/决"。</div>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">2</span><span class="kind">成语运用</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">下列句中加点词语使用有误的一项是（　）</div>
+    <div class="opts wide">
+      <div class="opt"><b>A．</b><span>意志消沉的史铁生同意去北海看花，这令母亲喜出望外。</span></div>
+      <div class="opt correct"><b>B．</b><span>我家的户口本不见了，妈妈在抽屉里翻来覆去，最终还是没找着。</span></div>
+      <div class="opt"><b>C．</b><span>大家对我们公司有什么意见请尽管提，我们洗耳恭听，虚心接受。</span></div>
+      <div class="opt"><b>D．</b><span>万千雪絮，飘飘洒洒，在空中交织着唯美的乐章。</span></div>
+    </div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext"><p><b>B</b></p></div>
+      <div class="anote"><b>批注</b>"翻来覆去"指来回翻身，或多次重复，不能形容反复翻找物品；此处应改为"翻来找去"。"洗耳恭听"是谦辞，用于自己专心听别人说话，用法正确。</div>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">3</span><span class="kind">句式变换</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">请把文中画波浪线的部分改成 3 个较短的句子，可以适当改变语序、增删词语，但不得改变原意。</div>
+    <div class="quote">原句：那些浪漫运动中的先驱者中的很大一部分人都像是眼睛里闪着一种奇异的热光的发着高热的病态的孩子。</div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext">
+        <p>①浪漫运动中的先驱者，很大一部分人都像孩子。</p>
+        <p>②他们眼睛里闪着一种奇异的热光。</p>
+        <p>③他们像发着高热的病态的孩子。</p>
+        <p class="alt">（语序调整、可增删"他们"等词语，意思不变即可）</p>
+      </div>
+      <div class="anote"><b>批注</b>长句变短句的关键是先提取主干（"先驱者像孩子"），再把两个长定语（"眼睛里闪着……热光""发着高热的病态"）拆成独立的分句，用代词"他们"衔接。</div>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">4</span><span class="kind">补写句子</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">请在横线处补写恰当的句子，使整段文字语意完整连贯、内容贴切、逻辑严密，每处不超过 15 个字。</div>
+    <div class="quote">浪漫派在艺术和思想上的主张是什么？我想，<span class="bk">　A　</span>。因为浪漫派正是在反对古典主义的斗争中登上历史舞台的，二者对照，能清晰看到浪漫主义在艺术上和思想上的主张。<br>……古典主义是一元的，它强调宇宙以太阳为中心……自然界如此，<span class="bk">　B　</span>。而浪漫派持多元历史观……</div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext">
+        <p>A：<b>把它和古典主义作一番对照</b>（12 字）</p>
+        <p>B：<b>人类社会也是如此</b>（8 字）</p>
+      </div>
+      <div class="anote"><b>批注</b>A 处后文紧接"二者对照，能清晰看到……"，所以 A 必须点出"对照"这一方法；B 处由"自然界"类推到"人类社会"，用"如此"承接，形成"自然—社会"的类比。</div>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">5</span><span class="kind">病句修改</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">文段中序号①至④里有两处语病，请指出序号并进行修改。</div>
+    <div class="quote">①古典主义强调文学要起到道德劝善，而浪漫派认为文学应该是不及物的……④在艺术形式上，古典主义强调严整典雅，而浪漫派比较强调多样出新，特别对诡谲华丽的形式爱不释手。</div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext">
+        <p>①成分残缺："起到"后缺宾语中心语 → 改为"强调文学要起到<b>道德劝善的作用</b>"。</p>
+        <p>④搭配不当："对……爱不释手"杂糅 → 改为"<b>特别喜爱诡谲华丽的形式</b>"（或"对诡谲华丽的形式特别偏爱"）。</p>
+      </div>
+      <div class="anote"><b>批注</b>抓两种高频病句：①"起到……"必须带"作用/效果"；④"爱不释手"本身已含"喜爱得舍不得放手"，不能再带"对……"的介宾结构。</div>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">6</span><span class="kind">修辞辨析</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">下列各项中，和画线的句子使用的修辞手法不同的一项是（　）</div>
+    <div class="quote">画线句（第三段）：落雪时分，世间喧嚣仿佛被大雪捂住了。</div>
+    <div class="opts wide">
+      <div class="opt"><b>A．</b><span>茕茕孑立，形影相吊。</span></div>
+      <div class="opt correct"><b>B．</b><span>何以解忧？唯有杜康。</span></div>
+      <div class="opt"><b>C．</b><span>湖月照我影，送我至剡溪。</span></div>
+      <div class="opt"><b>D．</b><span>相看两不厌，只有敬亭山。</span></div>
+    </div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext"><p><b>B</b>　画线句用<b>拟人</b>（大雪"捂住"喧嚣），A、C、D 也都是拟人（形影相"吊"、湖月"送"我、敬亭山"相看两不厌"），只有 B 是<b>借代</b>（以"杜康"代酒）。</p></div>
+      <div class="anote"><b>批注</b>借代与借喻易混：借代是"以相关代本体"（杜康→酒），借喻是"以相似喻本体"。这里"杜康"是造酒者，属相关代指，故为借代。</div>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">7</span><span class="kind">语言赏析</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">请赏析文中"屋顶白白，篱笆白白，田埂也白白"这一句话的表达效果。</div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext">
+        <p>①运用<b>反复</b>（"白白"三次重复）和<b>排比</b>，句式整齐、节奏明快，富有韵律感。</p>
+        <p>②由屋顶到篱笆再到田埂，<b>由上到下、由近及远</b>地铺开，写出雪后大地一片洁白的景象，突出雪之大、落雪之静。</p>
+        <p>③反复的语调传达出作者的欣喜、赞叹与喜爱之情。</p>
+      </div>
+      <div class="anote"><b>批注</b>赏析三步：手法（反复＋排比）→ 内容（写了什么景、有什么特点）→ 情感（表达什么心情）。"也"字还带有层层递进的意味，可加分。</div>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">8</span><span class="kind">语气辨析</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">选一选下列语句应该用什么语气来朗读。</div>
+    <div class="quote">A．痛苦、绝望、暴躁　B．小心翼翼、乞求　C．应付　D．喜出望外</div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext">
+        <p>(1)"听说北海的花都开了，我推着你去走走。"——<b>B</b></p>
+        <p>(2)"不，我不去！……我可活什么劲儿！"——<b>A</b></p>
+        <p>(3)"好吧，就明天。"——<b>C</b></p>
+        <p>(4)絮絮叨叨地说"看完菊花，咱们就去'仿膳'……"——<b>D</b></p>
+      </div>
+      <div class="anote"><b>批注</b>抓关键词判断语气：(1)"听说""去走走"是试探、商量；(2)"狠命""可活什么劲儿"是绝望爆发；(3)"好吧"是勉强答应、敷衍；(4)"高兴得一会儿坐下，一会儿站起"是全篇唯一一次母亲的雀跃。</div>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">9</span><span class="kind">细节描写</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">文中有不少细节描写感人至深，试分析下面两处细节描写的作用。</div>
+    <div class="opts wide">
+      <div class="opt"><b>(1)</b><span>母亲进来了，挡在窗前："北海的菊花开了，我推着你去看看吧。"</span></div>
+      <div class="opt"><b>(2)</b><span>对于"跑"和"踩"一类的字眼儿，她比我还敏感。</span></div>
+    </div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext">
+        <p>(1)"挡"这一动作细节：母亲怕"我"看见窗外落叶飘零而触景伤情、更加绝望，用身体挡住窗子。一个"挡"字写出母亲的细心、体贴与深沉的爱，也写出她对儿子心理的敏锐体察。</p>
+        <p>(2)母亲因儿子双腿瘫痪，对"跑""踩"这类词格外敏感，说话时小心避开。这一细节表现母亲对儿子伤痛的深切理解与呵护，也透出她自己内心的隐痛与小心翼翼的爱。</p>
+      </div>
+      <div class="anote"><b>批注</b>细节题答题模板："动作/词语＋写出了什么＋表现了人物什么心理/情感"。切忌只说"体现母爱"，要落到"挡什么、为什么挡"。</div>
+    </div>
+  </div>
+
+  <div class="part">第二部分　阅读与鉴赏（一）《秋天的怀念》</div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">10</span><span class="kind">内容概括</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">请用简洁的语言概括短文的主要内容。</div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext"><p>文章回忆"我"双腿瘫痪后脾气暴怒无常，母亲强忍自身病痛，一次次小心劝慰、体贴照料"我"，直到病情恶化猝然离世；最终"我"和妹妹去北海看菊花，懂得了母亲"好好儿活"的期望。表现了深沉无私的母爱，以及"我"对母亲的怀念、愧疚与对生命的感悟。</p></div>
+      <div class="anote"><b>批注</b>概括＝"谁＋做了什么＋结果/主旨"。要包含"母亲病重"这一层，否则答不出母爱的分量。</div>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">11</span><span class="kind">词语品味</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">请简要分析第①段画横线句子中加点字的表达效果。</div>
+    <div class="quote">母亲就<b>悄悄地</b>躲出去，在我看不见的地方<b>偷偷地</b>听着我的动静。</div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext"><p>"悄悄""偷偷"两个副词，写出母亲在"我"暴怒时既不愿打扰、又放心不下的矛盾心理：她躲出去给儿子发泄的空间，又忍不住暗中守候。两个词把母亲的小心、隐忍、牵挂写得细腻可感，突出母爱的深沉体贴。</p></div>
+      <div class="anote"><b>批注</b>两个词构成"行为上的退让"与"情感上的靠近"的对照，这正是答题要点；只答"表现母爱"会丢分。</div>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">12</span><span class="kind">修辞赏析</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">从修辞手法的角度赏析第⑦段画波浪线的句子。</div>
+    <div class="quote">黄色的花淡雅，白色的花高洁，紫红色的花热烈而深沉，泼泼洒洒，秋风中正开得烂漫。</div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext">
+        <p>①运用<b>排比</b>（"……的花……"三句并列）和<b>拟人</b>（"高洁""热烈而深沉"赋予花以人的品格），句式整齐、气势贯通。</p>
+        <p>②写出菊花色彩缤纷、各具风姿、开得蓬勃烂漫，象征母亲坚韧、无私的爱与对生活的热爱。</p>
+        <p>③借景抒情，表现"我"在母亲去世后对母爱的领悟，以及"好好儿活"的决心，深化主题。</p>
+      </div>
+      <div class="anote"><b>批注</b>"淡雅—高洁—热烈而深沉"暗合母亲的人格，属于"以花喻人"，可作为深层赏析加分。</div>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">13</span><span class="kind">关键语句 · 拓展</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">"好好儿活"这个关键语句在文中出现了两次，请说说你对这句话的理解。再联系实际，谈谈今天的我们应该怎样"好好儿活"。</div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext">
+        <p>第一次（第①段）：母亲说"咱娘儿俩在一块儿，好好儿活，好好儿活……"，是母亲在儿子绝望时对他的劝慰与承诺，既鼓励儿子坚强活下去，也透出母亲自身的坚忍。</p>
+        <p>第二次（结尾）："我俩在一块儿，要好好儿活……"，"我"终于读懂了母亲的期望，决心和妹妹坚强、有意义地生活，是对母亲的告慰，也是全文主旨的升华。</p>
+        <p>联系实际：一要珍爱生命，遇挫折不轻言放弃；二要珍惜亲情，多陪伴、理解家人；三要努力做好自己该做的事，让生活有价值、有温度。</p>
+      </div>
+      <div class="anote"><b>批注</b>答"两次"必须区分说话人与语境：前一次是母亲说，后一次是"我"的领悟，前后形成"嘱托—传承"的呼应。</div>
+    </div>
+  </div>
+
+  <div class="part">（二）《我的第一本书》　张洁</div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">14</span><span class="kind">段落作用</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">用自己的话说说第一段的作用。</div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext"><p>第一段交代"我"当时的处境与心境：生活在社会底层、被歧视、贫困压身，才华无从被发现，几乎认定"这一辈子再无出路"。作用：①渲染压抑、绝望的氛围，为下文写"我"不甘屈服、坚持写作作<b>铺垫（反衬）</b>；②以"绝望之始"对照后文"第一本书"的成功，突出奋斗的艰难与"第一本书"的分量；③设置悬念，吸引读者。</p></div>
+      <div class="anote"><b>批注</b>首段作用常用"交代……＋渲染……＋铺垫/反衬……＋设置悬念"四件套，按文本取舍。</div>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">15</span><span class="kind">信息概括</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">为了实现心中的文学梦，作者是怎样战胜所面临的各种困难的？试概括出来。</div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext">
+        <p>①精神上：生来不甘屈服，始终为挣脱压抑而苦斗，坚信自己能行。</p>
+        <p>②时间上：只能利用业余时间写作——在厨房切菜板上写，在洗衣、上班路上构思。</p>
+        <p>③写作上：不怕吃苦、反复打磨——第一篇小说修改五遍，被《人民文学》退稿后转投《北京文学》，终获发表并获奖。</p>
+        <p>④生活上：入不敷出仍坚持——白天上班，晚上给工厂缝手套、给工程师抄讲义补贴家用。</p>
+      </div>
+      <div class="anote"><b>批注</b>按"精神—时间—写作—生活"四个维度分层概括，比笼统说"她很努力"得分高。</div>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">16</span><span class="kind">标题含义</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">结合全文内容说一说文章题目"我的第一本书"的含义。</div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext">
+        <p>①实指：作者出版的第一本书（"装帧粗糙、纸张低劣"）。</p>
+        <p>②指她文学之路的起点：在近四十岁、几乎"赤手空拳"时开始耕耘，第一本书意味着梦想的实现与人生的转折。</p>
+        <p>③象征苦难与奋斗的结晶：书中凝结着母亲的辛劳（卖冰棍、卖牛奶）与自己的苦斗，印证"我的痛苦，其实正是我的财富"。</p>
+      </div>
+      <div class="anote"><b>批注</b>标题含义题答"实指＋虚指（象征/情感）"两层，并与文中关键句（"痛苦就是财富"）挂钩。</div>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">17</span><span class="kind">情感把握</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">认真阅读文章最后一段，你认为结尾表达了作者什么样的思想感情？</div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext"><p>表达对普通人的感念与热爱：作者说自己"是从普通人当中走出来的"，写作时想着中国老百姓，也想着整个人类；并立下"尽终生的力量为人类而写作"的宏愿。既是对苦难岁月的回望与感恩，也表现出深沉的责任感、使命感与悲悯情怀。</p></div>
+      <div class="anote"><b>批注</b>结尾由"个人感恩"上升到"为人类写作"，情感层次要写出这种"升华"。</div>
+    </div>
+  </div>
+
+  <div class="part">（三）《野孩子不爱白送的春天》</div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">18</span><span class="kind">梳理表格</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">阅读全文，根据提示，完成表格。</div>
+    <div class="quote">"野孩子"　｜　在野外　｜　在家里<br>苔藓　｜　茂盛安静　｜　②<br>荠菜　｜　自由乱长　｜　③<br>野菊花　｜　①　｜　蔫巴凌乱</div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext">
+        <p>① 肆无忌惮地绽放，灿烂金黄、张扬热烈</p>
+        <p>② 渐渐变黄、发黑，枯萎（养着养着就枯萎）</p>
+        <p>③ 只长一茬便偃旗息鼓，不肯再好好长</p>
+      </div>
+      <div class="anote"><b>批注</b>表格题要在原文定位对应段落（苔藓在第⑤段、荠菜在第⑨段、野菊花在第⑩—⑫段），照原文关键词提炼，不要自造。</div>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">19</span><span class="kind">词句品味</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">①结合语境，品味第③段画线句子中加点词语的表达效果。②请从修辞角度入手赏析第⑥段画线句子的表达效果。</div>
+    <div class="quote">①我<b>弯腰</b>，<b>低头</b>，在花下蜜蜂的嗡嗡声里，"<b>偷</b>"苔藓。小铲子紧贴石头或泥土，把苔藓<b>小心翼翼</b>铲起。<br>②如果突来一场雨，它们立刻就会<b>醒过来</b>。而醒过来的苔藓，转眼就<b>精神抖擞</b>，生机勃勃。</div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext">
+        <p>①"弯腰""低头"写出取苔藓时动作的轻缓、专注；"偷"字贬词褒用，既写出苔藓藏在花下的可爱，又写出作者取苔藓时的小心与珍爱；"小心翼翼"进一步表现出对苔藓的珍视与喜爱，语言生动俏皮，富有生活情趣。</p>
+        <p>②运用<b>拟人</b>："醒过来""精神抖擞"把苔藓当作人来写，生动形象地写出苔藓遇雨后迅速复苏、蓬勃生长的顽强生命力，流露作者的惊喜与赞美。</p>
+      </div>
+      <div class="anote"><b>批注</b>"偷"是赏析题眼：不是偷窃，而是"悄悄地、舍不得"的珍爱，注意"贬词褒用"这个术语。</div>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">20</span><span class="kind">朗读设计</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">请仿照示例，对第⑨段中的画线句子进行朗读设计（可从重音、停连等角度进行设计）。</div>
+    <div class="quote">我按时浇水，施肥，荠菜也慢慢长出了新叶。可是，仅一茬后荠菜便偃旗息鼓，再不肯满足我们打牙祭的心愿。</div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext"><p>"按时浇水""施肥"可连读，语气轻快，表现作者照料荠菜的用心与期待；"慢慢"读得舒缓，带一点欣慰；"可是"后稍作停顿，形成转折；"仅一茬""偃旗息鼓""再不肯"应重读，"偃旗息鼓"可放慢，突出荠菜离开野外后的萎靡，传达作者的意外、疑惑与些许失落。</p></div>
+      <div class="anote"><b>批注</b>朗读设计要"标位置＋说读法＋讲效果"三件套，且必须扣住句子前后情感的转折。</div>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">21</span><span class="kind">标题意蕴</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">请你结合文章内容，说说作者用"野孩子不爱白送的春天"为题，有什么意蕴。</div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext">
+        <p>①"野孩子"指苔藓、荠菜、野菊花等野生植物；"白送的春天"指被人精心搭建、浇水施肥的现成优裕环境。</p>
+        <p>②用拟人手法写出野花野草的天性：不贪恋安逸，只爱自由自在、野生野长，进了园子反而枯萎。</p>
+        <p>③借物喻人/托物言志：赞美自然本真、自由生长的生命，启示我们要尊重事物的本性，顺其自然，不把自己的意愿强加于人。</p>
+      </div>
+      <div class="anote"><b>批注</b>标题意蕴要"解词（野孩子/白送的春天）＋手法（拟人、托物言志）＋主旨（尊重天性、热爱自由）"。</div>
+    </div>
+  </div>
+</section>
+<!-- ============ L2 散步 ============ -->
+<section class="lesson" id="L2">
+  <div class="lhead">
+    <span class="lnum">UNIT 8 · 02</span>
+    <h2>《散步》课后作业单</h2>
+    <span class="tag2">莫怀戚 · 叙事散文</span>
+  </div>
+
+  <div class="part">第一部分　积累与运用</div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">1</span><span class="kind">注音</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">下列词语中注音全部正确的一项是（　）</div>
+    <div class="opts wide">
+      <div class="opt correct"><b>A．</b><span>信服（xìn fú）　分歧（fēn qí）　一霎（yī shà）　粼粼（lín lín）</span></div>
+      <div class="opt"><b>B．</b><span>熬过（áo guò）　嫩芽（nèn yá）　蹲下（zūn xià）　两全（liǎng quán）</span></div>
+      <div class="opt"><b>C．</b><span>随意（suí yì）　铺着（pù zhe）　委屈（wěi qū）　鱼塘（yú táng）</span></div>
+      <div class="opt"><b>D．</b><span>拆散（chāi sàn）　背负（bèi fù）　桑树（sāng shù）　咕咕（gū gū）</span></div>
+    </div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext"><p><b>A</b></p></div>
+      <div class="anote"><b>批注</b>B 项"蹲"应读 <b>dūn</b>；C 项"铺着"的"铺"作动词应读 <b>pū</b>；D 项"背负"应读 <b>bēi fù</b>（"背"作动词读 bēi）。</div>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">2</span><span class="kind">字形</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">下列词语中没有错别字的一项是（　）</div>
+    <div class="opts wide">
+      <div class="opt"><b>A．</b><span>信服　分歧　各得其所　水波鳞鳞</span></div>
+      <div class="opt correct"><b>B．</b><span>熬过　嫩芽　随意铺着　两全其美</span></div>
+      <div class="opt"><b>C．</b><span>拆散　委曲　一霎时　波光粼粼</span></div>
+      <div class="opt"><b>D．</b><span>取决　鱼塘　桑树　笑咪咪</span></div>
+    </div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext"><p><b>B</b></p></div>
+      <div class="anote"><b>批注</b>A"水波鳞鳞"应为<b>水波粼粼</b>；C"委曲"应为<b>委屈</b>；D"笑咪咪"应为<b>笑眯眯</b>。</div>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">3</span><span class="kind">成语运用</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">下列句子中加点的成语使用不恰当的一项是（　）</div>
+    <div class="opts wide">
+      <div class="opt"><b>A．</b><span>一家人围坐在一起，其乐融融，温馨极了。</span></div>
+      <div class="opt"><b>B．</b><span>面对家人的分歧，他一时间感到不知所措。</span></div>
+      <div class="opt"><b>C．</b><span>这篇散文以小见大，从一件生活小事中挖掘出深刻的主题。</span></div>
+      <div class="opt correct"><b>D．</b><span>母亲虽然年迈，却总把家里打理得各得其所，让人一进门就觉得温馨。</span></div>
+    </div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext"><p><b>D</b></p></div>
+      <div class="anote"><b>批注</b>"各得其所"指每个人或事物都得到恰当的位置、安排，不能用来形容"把家务打理得好"，此处可用"井井有条"。</div>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">4</span><span class="kind">病句</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">下列句子没有语病的一项是（　）</div>
+    <div class="opts wide">
+      <div class="opt"><b>A．</b><span>通过这次"孝亲敬老"主题活动，使我更加懂得了亲情的珍贵。</span></div>
+      <div class="opt"><b>B．</b><span>为了防止类似的错误不再发生，我们必须认真总结经验教训。</span></div>
+      <div class="opt correct"><b>C．</b><span>《散步》这篇散文，通过对一次家庭散步的描写，表现了中华民族尊老爱幼的传统美德。</span></div>
+      <div class="opt"><b>D．</b><span>能否孝敬父母，是衡量一个人品德高尚的重要标准。</span></div>
+    </div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext"><p><b>C</b></p></div>
+      <div class="anote"><b>批注</b>A"通过……使……"缺主语（删"通过"或"使"）；B"防止……不再发生"否定不当（删"不"）；D"能否"是两面，与"品德高尚"一面不搭配。</div>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">5</span><span class="kind">标点</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">下列句子中标点符号使用不正确的一项是（　）</div>
+    <div class="opts wide">
+      <div class="opt"><b>A．</b><span>我们在田野上散步：我，我的母亲，我的妻子和儿子。</span></div>
+      <div class="opt"><b>B．</b><span>"前面也是妈妈和儿子，后面也是妈妈和儿子！"我们都笑了。</span></div>
+      <div class="opt"><b>C．</b><span>她的眼睛顺小路望过去：那里有金色的菜花、两行整齐的桑树，尽头一口水波粼粼的鱼塘。</span></div>
+      <div class="opt correct"><b>D．</b><span>母亲说："我走不过去的地方，你就背着我"。</span></div>
+    </div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext"><p><b>D</b>　引号内是完整引用，句号应放在引号<b>内</b>：……你就背着我<b>。</b>"</p></div>
+      <div class="anote"><b>批注</b>标点口诀：完整引用，点号在引号内；部分引用，点号在引号外。</div>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">6</span><span class="kind">文学常识</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">下列关于文学常识的表述，不正确的一项是（　）</div>
+    <div class="opts wide">
+      <div class="opt"><b>A．</b><span>《散步》的作者莫怀戚是重庆人，当代作家，代表作有小说《诗礼人家》等。</span></div>
+      <div class="opt"><b>B．</b><span>《散步》写于 1985 年，是一篇叙事散文，最初发表在《中国青年报》上。</span></div>
+      <div class="opt"><b>C．</b><span>散文讲究"形散神不散"，《散步》以"散步"为线索，串联起祖孙三代互敬互爱的画面。</span></div>
+      <div class="opt correct"><b>D．</b><span>《散步》与朱自清的《春》同属写景抒情散文，都以细腻的景物描写见长。</span></div>
+    </div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext"><p><b>D</b>　《散步》是<b>叙事散文</b>（以小见大、写人记事），《春》是写景抒情散文，二者文体不同。</p></div>
+      <div class="anote"><b>批注</b>常见设误：把叙事散文说成写景抒情散文。判断依据是"以什么为主"——写事写人还是写景抒情。</div>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">7</span><span class="kind">语句排序</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">将下列句子填入下面语段的横线处，顺序最恰当的一项是（　）</div>
+    <div class="quote">亲情，是人世间最朴素也最动人的情感。____，____。____，____。正是这些平凡的点滴，构成了我们生命中最珍贵的记忆。<br>①它不需要轰轰烈烈的表达　②一个关切的眼神，一句温暖的话语　③只需要一次耐心的倾听　④都能让人感受到家的温度</div>
+    <div class="opts wide">
+      <div class="opt correct"><b>A．</b><span>①③②④</span></div>
+      <div class="opt"><b>B．</b><span>②④①③</span></div>
+      <div class="opt"><b>C．</b><span>①③④②</span></div>
+      <div class="opt"><b>D．</b><span>②④③①</span></div>
+    </div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext"><p><b>A</b>　①③先构成"不需要……只需要……"的对照；②是举例（眼神、话语），④以"都"总结，与后文"这些平凡的点滴"衔接。</p></div>
+      <div class="anote"><b>批注</b>排序抓三处：关联词（"不需要……只需要"）、代词（"都"指代前面的例子）、后文呼应（"这些平凡的点滴"）。</div>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">8</span><span class="kind">仿写 · 对称句</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">（1）请仿照示例，以"亲情"为话题写一组对称句。（2）请用一组对称句描绘你与家人相处的某个温馨场景。</div>
+    <div class="quote">示例：她现在很听我的话，就像我小时候很听她的话一样。</div>
+    <div class="ans">
+      <span class="alab">答案（示例）</span>
+      <div class="atext">
+        <p>（1）她现在总惦记着我的冷暖，就像我小时候总依赖着她的怀抱一样。</p>
+        <p>（2）我扶着奶奶慢慢上楼梯，就像小时候奶奶牵着我的手一步步上台阶一样。</p>
+      </div>
+      <div class="anote"><b>批注</b>对称句＝两半句结构对称、字数相近、意思相对或相承，常用"……就像……一样"把两代人的位置互换，形成温情回环。</div>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">9</span><span class="kind">语段综合</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">阅读语段，完成（1）—（4）题。</div>
+    <div class="quote">①家，是一幅永远也画不完的画。②它是清晨厨房里飘散的粥香，是黄昏门前翘首的等待，是深夜书桌旁悄然搁下的一杯热牛奶。③我们一天天长大，父母却一天天老去；我们总以为来日方长，却常常忽略了眼前的陪伴。④树欲静而风不止，子欲养而亲不待。⑤趁一切还来得及，__________！</div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext">
+        <p>（1）<b>比喻</b>（暗喻，把"家"比作"一幅永远也画不完的画"）。效果：把抽象的"家"化为具体可感的画面，生动形象地写出家的内容丰富、温馨美好、爱意无穷，抒发对家的热爱与眷恋。</p>
+        <p>（2）分号分隔两个<b>并列分句</b>——"我们一天天长大，父母却一天天老去"与"我们总以为来日方长，却常常忽略了眼前的陪伴"，使两层对比的意思层次分明、句意清楚。</p>
+        <p>（3）<b>引用</b>名言（"树欲静而风不止，子欲养而亲不待"），以古语警示人心，增强说服力和感染力，突出"行孝要及时"的主旨。</p>
+        <p>（4）示例：<b>多陪陪身边的父母吧</b>（或"好好爱他们、好好陪伴他们吧"）。</p>
+      </div>
+      <div class="anote"><b>批注</b>（1）注意是"暗喻"（用"是"连接）；（2）分号的作用只答"并列"即可，但要指出并列的是什么；（4）补写要与"趁一切还来得及"语气一致，用祈使句。</div>
+    </div>
+  </div>
+
+  <div class="part">第二部分　阅读与鉴赏（一）选段 ①—④</div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">10</span><span class="kind">内容概括</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">请用简洁的语言概括选段的主要内容。</div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext"><p>写"我"劝年迈的母亲出来散步，母亲信服地答应了；又描写南方初春田野生机勃勃的景色，抒发对生命的感悟。表现一家人相伴的温馨和"我"对母亲的关爱。</p></div>
+      <div class="anote"><b>批注</b>概括要包含"事件（劝母亲散步）＋景物（初春田野）＋情感（关爱、生命感悟）"三要素。</div>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">11</span><span class="kind">词语品味</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">"我的母亲又熬过了一个严冬"一句中的"熬"字用得很好，请说说好在哪里。</div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext"><p>"熬"写出母亲年老体弱、病痛缠身，度过严冬之艰难（不是"过"，而是"熬"）；同时写出"我"为母亲挺过冬天而感到庆幸、欣慰，饱含对母亲的疼爱与担忧，也为下文母亲猝然离世埋下伏笔。</p></div>
+      <div class="anote"><b>批注</b>"熬"有两面：母亲的"苦"与"我"的"疼"。答题要兼顾，并指出与下文的照应。</div>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">12</span><span class="kind">景物描写</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">选段中画线句（第④段）属于什么描写？有什么作用？</div>
+    <div class="quote">这南方初春的田野！大块儿小块儿的新绿随意地铺着……这一切都使人想着一样东西——生命。</div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext">
+        <p>属于<b>自然环境（景物）描写</b></p>
+        <p>作用：①写出初春田野新绿铺展、嫩芽初生、冬水冒泡的生机景象；②烘托一家人散步时愉悦、温馨的心情；③由景及"生命"，点出"生命"的主题，暗示母亲"熬过严冬"的欣慰，为下文背母亲作铺垫。</p>
+      </div>
+      <div class="anote"><b>批注</b>景物描写作用四连：写出景物特点→烘托心情→暗示主题→推动情节（铺垫）。</div>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">13</span><span class="kind">内容理解</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">从选段看，"我"为什么要劝母亲出来散步？这体现了"我"怎样的情感？</div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext"><p>母亲老了、身体不好，走远一点儿就觉得累；"我"认为正因为如此，才更应该多走走、多活动，对身体有好处。这体现"我"对母亲的关心、体贴与孝顺，以及希望母亲健康长寿的心愿。</p></div>
+      <div class="anote"><b>批注</b>注意"正因为如此"中的"此"指"身体不好"，所以理由是"因弱而更需锻炼"，这是理解的难点。</div>
+    </div>
+  </div>
+
+  <div class="part">（二）选段 ⑤—⑧</div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">14</span><span class="kind">内容理解</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">文中"分歧"具体指什么？"我"是怎样解决这一分歧的？</div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext"><p>"分歧"指：母亲要走大路（大路平顺），儿子要走小路（小路有意思）。"我"决定委屈儿子、走大路——因为"我"伴同儿子的时日还长，伴同母亲的时日已短。</p></div>
+      <div class="anote"><b>批注</b>答"怎样解决"要写出理由（时日长短的权衡），这才是"我"孝顺、有责任感的体现。</div>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">15</span><span class="kind">对称句赏析</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">请从对称句的角度赏析下面的句子。</div>
+    <div class="quote">我的母亲老了，她早已习惯听从她强壮的儿子；我的儿子还小，他还习惯听从他高大的父亲。</div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext"><p>句式对称（"母亲老了……儿子还小……""强壮的儿子……高大的父亲"），字数相近、结构相仿，形成回环往复的节奏与音韵美；把"老"与"小"、"母亲"与"儿子"对照，写出两代人对"我"的依赖与信任，突出"我"承上启下的责任感和家庭互敬互爱的温情。</p></div>
+      <div class="anote"><b>批注</b>赏析对称句三步：指出对称（哪些词句对称）→ 说节奏/形式美 → 落到内容与情感（责任、温情）。</div>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">16</span><span class="kind">关键句理解</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">如何理解"好像我背上的同她背上的加起来，就是整个世界"这句话？</div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext"><p>①"我"背的是母亲（老一辈），妻子背的是儿子（新一代），两人背起的正是家庭的全部、生命的传承。②以"整个世界"作比（夸张/比喻），写出中年人肩负的责任之重，也写出亲情的分量。③表现尊老爱幼的传统美德与家庭的温馨和谐，升华主旨。</p></div>
+      <div class="anote"><b>批注</b>这句是全文"文眼"，答题必须点出"老—小—责任—传承"这组关键词。</div>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">17</span><span class="kind">人物形象</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">结合全文，简要分析"我"这一人物形象。</div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext">
+        <p>①孝顺体贴：劝母亲散步，分歧时决定走大路，处处为母亲着想。</p>
+        <p>②有责任感、勇于担当：感到"责任的重大"，主动背起母亲。</p>
+        <p>③温和稳重、善解人意：说话简短（"走大路"），尊重妻子、疼爱儿子，兼顾全家。</p>
+      </div>
+      <div class="anote"><b>批注</b>人物形象题＝"性格词＋文中依据"，至少写三点，每点都要有情节支撑。</div>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">18</span><span class="kind">内容理解</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">下列对文章内容的理解和分析，不正确的一项是（　）</div>
+    <div class="opts wide">
+      <div class="opt"><b>A．</b><span>文章以"散步"为线索，串联起祖孙三代互敬互爱的多个生活画面。</span></div>
+      <div class="opt correct"><b>B．</b><span>第⑦段写母亲"变了主意"，表现了她对孙儿的疼爱，也暗示了家庭内部的矛盾激化。</span></div>
+      <div class="opt"><b>C．</b><span>第⑧段中"慢慢地""稳稳地"两个词语，表现了"我"和妻子背起亲人时的小心谨慎。</span></div>
+      <div class="opt"><b>D．</b><span>文章运用以小见大的手法，通过一次家庭散步表现了尊老爱幼的传统美德。</span></div>
+    </div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext"><p><b>B</b>　母亲改走小路是疼爱孙儿、迁就儿子，体现家庭的和睦与谦让，并非"矛盾激化"。</p></div>
+      <div class="anote"><b>批注</b>此类题常在"情感定性"上设误：把"温情"说成"矛盾"、把"理解"说成"冲突"。</div>
+    </div>
+  </div>
+
+  <div class="part">（三）《孝心无价（节选）》　毕淑敏</div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">19</span><span class="kind">内容理解</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">下列对文章内容的理解，不正确的一项是（　）</div>
+    <div class="opts wide">
+      <div class="opt"><b>A．</b><span>作者不喜欢"苦孩子求学"的故事，是因为那个学子把个人利益放在了母亲之上。</span></div>
+      <div class="opt"><b>B．</b><span>第②段写"断然离去的游子"，意在批评那些在父母最需要时却选择远行的人。</span></div>
+      <div class="opt correct"><b>C．</b><span>第③段中"来日方长""水到渠成"等词语，表现了作者对"从容尽孝"的赞赏与肯定。</span></div>
+      <div class="opt"><b>D．</b><span>第⑧段列举了种种尽孝的方式，意在说明孝心并不在于物质的丰厚。</span></div>
+    </div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext"><p><b>C</b>　"来日方长""水到渠成"写的是孩子天真的幻想（以为将来可以从容尽孝），作者对之又惋惜又警醒，是<b>否定</b>而非赞赏。</p></div>
+      <div class="anote"><b>批注</b>注意"可惜人们忘了……"一句的转折，作者的态度是"批评这种侥幸心理"。</div>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">20</span><span class="kind">句意理解</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">作者说"世上有些东西可以弥补，有些东西永无弥补"。请结合文章，谈谈你对这句话的理解。</div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext"><p>可以弥补的，是物质上的欠缺、一时的疏忽、日后的努力；<b>永无弥补</b>的，是父母健在时的陪伴与孝心——父母一旦离去，"你就永远无以言孝"，任何金钱、成就都无法补偿。作者以此告诫儿女：尽孝要趁早，抓住父母健在的光阴。</p></div>
+      <div class="anote"><b>批注</b>答题要点：区分"可弥补/不可弥补"，落脚在"及时行孝"。</div>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">21</span><span class="kind">观点探究</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">文章结尾说"但'孝'的天平上，它们等值"。你是否赞同这一说法？请说明理由。</div>
+    <div class="ans">
+      <span class="alab">答案（示例）</span>
+      <div class="atext"><p>赞同。孝心不以物质多少衡量：一处豪宅与一片砖瓦、一桌山珍与一只野果、一顶博士帽与作业本上的一个红五分，只要是发自真心、尽了力的，其情意同样珍贵。"孝"的本质是心意与行动，而非金钱的厚薄，所以说它们在"孝"的天平上等值。</p><p class="alt">（若答"不完全赞同"，可补充：现实中物质条件也会影响父母的生活质量，应在心意之外尽力给予更好的照顾。）</p></div>
+      <div class="anote"><b>批注</b>此类开放题：先亮观点，再扣文本举例，最后点明"孝的本质是心意"。</div>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">22</span><span class="kind">比较阅读 · 不少于80字</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">《散步》与本文都围绕"亲情"（孝）展开，但两文的体裁和表达方式有所不同。请结合两文内容，简要分析它们在表现亲情时的不同特点，并谈谈你从中获得的启示。（不少于 80 字）</div>
+    <div class="ans">
+      <span class="alab">答案（示例）</span>
+      <div class="atext"><p>《散步》是叙事散文，以一次家庭散步的小事为线索，靠具体细节（"我"背母亲、"妻子"背儿子）和对称句式，含蓄地表现尊老爱幼的亲情，让读者从画面中体会温情。《孝心无价》是议论性散文，以议论、抒情为主，通过列举"苦孩子求学""断然离去的游子"等现象并加以对比说理，直接表明"孝要及早"的观点，说理鲜明有力。启示：亲情不在惊天动地的大事，而在日常的陪伴与体谅；行孝不能等，要从现在做起，用行动回报父母。</p></div>
+      <div class="anote"><b>批注</b>比较阅读要"分维度对比"（体裁/表达方式/效果），再统一落到"启示"，字数务必超过 80 字。</div>
+    </div>
+  </div>
+</section>
+<!-- ============ L3 世说新语二则 ============ -->
+<section class="lesson" id="L3">
+  <div class="lhead">
+    <span class="lnum">UNIT 8 · 03</span>
+    <h2>《〈世说新语〉二则》课后作业单</h2>
+    <span class="tag2">刘义庆 · 志人小说</span>
+  </div>
+
+  <div class="part">第一部分　积累与运用</div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">1</span><span class="kind">文学常识</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">《世说新语》是______（朝代）组织编写的一部______小说集，主要记载汉末至东晋士大夫的言谈、逸事。《咏雪》出自《____》篇，《陈太丘与友期行》出自《____》篇。</div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext"><p><b>南朝宋</b>（刘义庆）　<b>志人</b>　《<b>言语</b>》　《<b>方正</b>》</p></div>
+      <div class="anote"><b>批注</b>易错点：朝代是"南朝宋"（不是唐、宋）；小说类别是"志人"（记人言行），不是"志怪"（记神怪）。</div>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">2</span><span class="kind">词语解释</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">解释下列句中加点词语的意思。</div>
+    <div class="quote">谢太傅寒雪日内集（　），与儿女（　）讲论文义（　）。俄而（　）雪骤（　），公欣然（　）曰……撒盐空中差（　）可拟（　）。未若（　）柳絮因（　）风起。<br>陈太丘与友期行（　），期日中。过中不至，太丘舍去（　），去后乃（　）至。元方时（　）年七岁……尊君（　）在不？……相委（　）而去……君与家君（　）期日中……友人惭（　），下车引（　）之。元方入门不顾（　）。</div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext">
+        <p>内集：<b>家庭聚会</b>。儿女：<b>子侄辈（家中的晚辈）</b>。讲论文义：<b>讲解诗文</b>。</p>
+        <p>俄而：<b>不久，一会儿</b>。骤：<b>急（雪下得急）</b>。欣然：<b>高兴的样子</b>。</p>
+        <p>差：<b>大致、差不多</b>。拟：<b>相比</b>。未若：<b>不如，比不上</b>。因：<b>凭借（趁、乘）</b>。</p>
+        <p>期行：<b>相约同行</b>。舍去：<b>丢下（他）离开</b>。乃：<b>才</b>。时：<b>当时</b>。</p>
+        <p>尊君：<b>对别人父亲的尊称</b>。委：<b>舍弃、丢下</b>。家君：<b>对人称自己的父亲</b>。惭：<b>感到惭愧</b>。引：<b>拉，牵拉</b>。顾：<b>回头看</b>。</p>
+      </div>
+      <div class="anote"><b>批注</b>高频实词必背："内集、俄而、骤、差、拟、因、委、引、顾"；"儿女""去""委""因"都是古今异义重点。</div>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">3</span><span class="kind">文言现象</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">重点文言现象总结：通假字、词类活用、一词多义、古今异义、特殊句式。</div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext">
+        <p>1）【通假字】尊君在<b>不</b>："不"同"<b>否</b>"，意思是<b>表疑问，相当于"吗"</b>。</p>
+        <p>2）【词类活用】友人<b>惭</b>：<b>形容</b>词作<b>动</b>词，释义：<b>感到惭愧</b>。</p>
+        <p>3）【一词多义】①下车引<b>之</b>：<b>代词，指元方</b>。②左将军王凝<b>之</b>妻也：<b>人名中的字，无实义</b>。</p>
+        <p>4）【古今异义】<br>
+        <b>儿女</b>讲论文义　古义：<b>子侄辈，泛指家中晚辈</b>；今义：<b>儿子和女儿</b>。<br>
+        太丘舍<b>去</b>　古义：<b>离开</b>；今义：<b>前往（到某处去）</b>。<br>
+        相<b>委</b>而去　古义：<b>舍弃、丢下</b>；今义：<b>委托、委派</b>。</p>
+        <p>5）【特殊句式】<br>
+        "白雪纷纷何所似"——<b>倒装句（宾语前置）</b>，正常语序：<b>白雪纷纷所似何</b>。<br>
+        "左将军王凝之妻也"——<b>判断句</b>，标志：<b>"……也"</b>。<br>
+        "过中不至，太丘舍去，去后乃至"——<b>省略句</b>，补全为：<b>（友）过中不至，太丘舍去，（太丘）去后（友）乃至</b>。</p>
+      </div>
+      <div class="anote"><b>批注</b>"何所似"是宾语前置（疑问代词作宾语前置），要与"何陋之有"一类区分；判断句标志"……也"必须答出来。</div>
+    </div>
+  </div>
+
+  <div class="part">二、翻译</div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">译1</span><span class="kind">句子翻译</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">白雪纷纷何所似？</div>
+    <div class="ans"><span class="alab">答案</span><div class="atext"><p>纷纷扬扬的白雪像什么呢？</p></div></div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">译2</span><span class="kind">句子翻译</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">未若柳絮因风起。</div>
+    <div class="ans"><span class="alab">答案</span><div class="atext"><p>不如比作柳絮乘风飞舞。</p></div><div class="anote"><b>批注</b>"因"译为"凭借、趁、乘"，不能译成"因为"。</div></div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">译3</span><span class="kind">句子翻译</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">撒盐空中差可拟。</div>
+    <div class="ans"><span class="alab">答案</span><div class="atext"><p>把盐撒在空中，大体可以相比。</p></div><div class="anote"><b>批注</b>"差"读 chā，译为"大致、差不多"，不能译成"差劲"。</div></div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">译4</span><span class="kind">句子翻译</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">过中不至，则是无信；对子骂父，则是无礼。</div>
+    <div class="ans"><span class="alab">答案</span><div class="atext"><p>（您）过了中午还没有到，就是不讲信用；对着人家的儿子骂他的父亲，就是没有礼貌。</p></div><div class="anote"><b>批注</b>两个"则是"都要译出"就是"；省略的主语"您"要补出来。</div></div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">译5</span><span class="kind">句子翻译</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">友人惭，下车引之。元方入门不顾。</div>
+    <div class="ans"><span class="alab">答案</span><div class="atext"><p>友人感到惭愧，下车来拉元方。元方走进家门，连头也不回。</p></div><div class="anote"><b>批注</b>"引"是"拉"，"顾"是"回头看"，两个词都不能想当然。</div></div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">译6</span><span class="kind">句子翻译</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">非人哉！与人期行，相委而去。</div>
+    <div class="ans"><span class="alab">答案</span><div class="atext"><p>真不是人啊！和别人约好一起走，（却）丢下我走了。</p></div><div class="anote"><b>批注</b>"相"在此表示动作偏指一方，可译为"我"；"委"是"丢下"。</div></div>
+  </div>
+
+  <div class="part">第二部分　阅读与鉴赏（课内）</div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">1</span><span class="kind">内容理解</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">《咏雪》中谢太傅更欣赏谁的比喻？从文中哪句话可以看出来？你更喜欢谁的比喻，请说明理由。</div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext">
+        <p>更欣赏谢道韫（兄女）"柳絮因风起"的比喻，从"<b>公大笑乐</b>"可以看出（文末又补叙"即公大兄无奕女，左将军王凝之妻也"，也暗示了对她的赞赏）。</p>
+        <p>我更喜欢"柳絮因风起"：它写出雪花轻盈飘飞、随风起舞的姿态，形神兼备，富有诗意和想象力，还暗含春天将至的美感；"撒盐空中"只写出雪的白和下落之态，缺少韵味。</p>
+        <p class="alt">（若更喜欢"撒盐空中"，可说：它切合"雪骤"的情境，形色相近，比喻贴切直白。）</p>
+      </div>
+      <div class="anote"><b>批注</b>"大笑乐"三字是唯一明证；理由要落在"形似"与"神似"的区别上。</div>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">2</span><span class="kind">人物评价</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">《陈太丘与友期行》中元方"入门不顾"，你如何评价元方的行为？</div>
+    <div class="ans">
+      <span class="alab">答案（示例）</span>
+      <div class="atext"><p>元方当时才七岁，面对友人的"无信""无礼"（失约又当面骂其父），他能据理反驳、维护父亲的尊严，"入门不顾"表现他懂礼、明理、率直有原则，值得肯定；但对方毕竟是长辈且已"惭，下车引之"，完全不理略显失礼、不够宽容。总体看，元方机敏善辩、明理守礼，若待人多一分宽厚则更好。</p></div>
+      <div class="anote"><b>批注</b>评价人物要"辩证"：既肯定（维护父亲尊严、明理），也指出不足（对长辈失礼），两个角度都要有文本依据。</div>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">3</span><span class="kind">人物形象</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">结合课文，分析陈太丘、友人的人物形象。</div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext">
+        <p><b>陈太丘</b>：守时守信、做事有原则（"过中不至，太丘舍去"，到点就走，不无原则等待）；教子有方（儿子元方小小年纪明理善辩）。</p>
+        <p><b>友人</b>：不守时、不讲信用（"过中不至"）；出言无礼（"非人哉""对子骂父"）；但能知错就改（"惭，下车引之"）。</p>
+      </div>
+      <div class="anote"><b>批注</b>分析人物要"先定性（如守信/无信），再举例（原文语句）"。</div>
+    </div>
+  </div>
+
+  <div class="part">（课外）《孔融让梨》</div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">1</span><span class="kind">词语解释</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">解释加点词：①与诸兄共食梨（　）　②大人问其故（　）</div>
+    <div class="ans"><span class="alab">答案</span><div class="atext"><p>①共：<b>一起</b>。②故：<b>原因、缘故</b>。</p></div></div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">2</span><span class="kind">句子翻译</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">融辄引小者。</div>
+    <div class="ans"><span class="alab">答案</span><div class="atext"><p>孔融总是拿小的（梨）。</p></div><div class="anote"><b>批注</b>"辄"译为"总是、就"；"引"在此为"拿、取"。</div></div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">3</span><span class="kind">对比分析</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">元方与孔融身上共同体现了什么家风品质？结合两文简要分析。</div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext"><p>共同体现了<b>明理守礼、谦让敬长（孝悌）</b>的家风品质。元方七岁便懂得"信"与"礼"，面对友人的失信无礼据理力争，维护父亲的尊严，可见家教严谨、明理有节；孔融四岁便懂得把大梨让给兄长，"法当取小者"，可见谦让有礼、尊敬兄长。两文都说明良好的家教能培养出知礼明理、谦让有德的少年。</p></div>
+      <div class="anote"><b>批注</b>对比题要"提炼共同点＋分别举证"，两个"年幼"（七岁、四岁）是重要抓手。</div>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">4</span><span class="kind">拓展思考</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">结合两篇短文，说说良好家风对少年成长有怎样的作用。</div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext"><p>①良好家风如无声的教诲，能在日常小事中潜移默化地塑造孩子的品行，使他们从小懂得守信、有礼、谦让、敬长；②家风正，则孩子明辨是非、言行有度，形成稳定的道德底线；③少年时期养成的品格会伴随一生，成为立身处世的基础。所以良好家风是少年成长最好的"起跑线"。</p></div>
+      <div class="anote"><b>批注</b>答"作用"要从"当下（品行养成）—长远（一生立身）"两个层面递进。</div>
+    </div>
+  </div>
+</section>
+<!-- ============ L4 从百草园到三味书屋 ============ -->
+<section class="lesson" id="L4">
+  <div class="lhead">
+    <span class="lnum">UNIT 8 · 04</span>
+    <h2>《从百草园到三味书屋》课后作业单</h2>
+    <span class="tag2">鲁迅 · 散文（《朝花夕拾》）</span>
+  </div>
+
+  <div class="part">第一部分　积累与运用</div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">1</span><span class="kind">读音 · 字形</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">下列加点字的读音与字形完全正确的一项是（　）</div>
+    <div class="opts wide">
+      <div class="opt"><b>A．</b><span>脑髓（suí）　蝉蜕（tuì）　白颊（jiá）　确凿（záo）　皂荚（jiá）</span></div>
+      <div class="opt"><b>B．</b><span>攒成（zǎn）　系上（jì）　签赏（jiàn）　收敛（liǎn）　缠络（luò）</span></div>
+      <div class="opt"><b>C．</b><span>宿儒（xiǔ）　后窍（qiào）　秕谷（bǐ）　斑蝥（máo）　书熟（shú）</span></div>
+      <div class="opt correct"><b>D．</b><span>桑椹（shèn）　锡箔（bó）　倜傥（tì）　拗过去（ǎo）　窜向（cuàn）</span></div>
+    </div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext"><p><b>D</b></p></div>
+      <div class="anote"><b>批注</b>A"脑髓"应读 <b>suǐ</b>；B"攒成"应读 <b>cuán</b>，"签赏"应为<b>鉴赏</b>；C"宿儒"应读 <b>sù</b>，"书熟"应为<b>书塾</b>。</div>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">2</span><span class="kind">成语运用</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">下列句子中加点词语运用不恰当的一项是（　）</div>
+    <div class="opts wide">
+      <div class="opt"><b>A．</b><span>冬天的百草园是一个人迹罕至的地方。</span></div>
+      <div class="opt"><b>B．</b><span>农民看着干涸的土地，哪怕是一场小雨也让他们望眼欲穿。</span></div>
+      <div class="opt"><b>C．</b><span>农家小院中的小猫和母鸡注意到了来历不明的丑小鸭。</span></div>
+      <div class="opt correct"><b>D．</b><span>我一个人漫步在寂静的街头，在人声鼎沸中回忆过去。</span></div>
+    </div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext"><p><b>D</b>　"人声鼎沸"形容人声嘈杂喧闹，与"寂静的街头"自相矛盾。</p></div>
+      <div class="anote"><b>批注</b>成语误用常考"自相矛盾"（寂静 vs 人声鼎沸）、"望文生义"（差强人意）、"对象误用"。</div>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">3</span><span class="kind">语句衔接</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">依次填入下面一段文字横线处的语句，衔接最恰当的一项是（　）</div>
+    <div class="quote">书屋朝西，门两边开窗……东面正中挂一幅画，画上古树底下伏着一只梅花鹿，那是当年学生朝着行礼的地方。______，______。______，______。______。<br>①学生的书桌分列在四面，东北角上是鲁迅用过的一张　②当年鲁迅就在那里读书、习字、对课　③桌子上整齐地放着笔墨纸砚和一把不常使用的戒尺　④或者把宣纸蒙在《西游记》一类的小说上描绣像　⑤画前面，正中是先生的座位，朴素的八仙桌，高背的椅子</div>
+    <div class="opts wide">
+      <div class="opt correct"><b>A．</b><span>⑤③①②④</span></div>
+      <div class="opt"><b>B．</b><span>③⑤①④②</span></div>
+      <div class="opt"><b>C．</b><span>⑤③②④①</span></div>
+      <div class="opt"><b>D．</b><span>③⑤①②④</span></div>
+    </div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext"><p><b>A</b>　⑤承接上句"画"（画前是先生的座位）→③写桌上陈设→①转到学生的书桌（空间顺序：先生→学生）→②"那里"指鲁迅的书桌→④"或者"承接"读书、习字、对课"。</p></div>
+      <div class="anote"><b>批注</b>排序抓"空间顺序（画前→桌→四面书桌→东北角）"和"代词（那里）＋关联词（或者）"。</div>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">4</span><span class="kind">病句</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">找出其中没有语病的一项（　）</div>
+    <div class="opts wide">
+      <div class="opt"><b>A．</b><span>鲁迅一生都致力于文学创作，他的杂文集就有大约二十多部。</span></div>
+      <div class="opt"><b>B．</b><span>百草园本来只是一个蔓草丛生、人迹罕至的极普通的园子，因而在童年鲁迅的眼中，则是"我的乐园"。</span></div>
+      <div class="opt correct"><b>C．</b><span>被誉为"民族魂"的鲁迅，在少年时代也曾有在百草园捕鸟的童真童趣。</span></div>
+      <div class="opt"><b>D．</b><span>鲁迅先生之所以让后人铭记的原因，不单由于他的文学创作，更重要的是他的人格。</span></div>
+    </div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext"><p><b>C</b></p></div>
+      <div class="anote"><b>批注</b>A"大约"与"二十多"语义重复（表约数重复）；B"因而"关联词不当，前后是转折关系（应"但在童年鲁迅的眼中……却……"）；D"之所以……的原因"句式杂糅。</div>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">5</span><span class="kind">文学常识</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">下列有关文化和文学常识的表述错误的一项是（　）</div>
+    <div class="opts wide">
+      <div class="opt"><b>A．</b><span>《秋天的怀念》选自《史铁生散文选》。史铁生的代表作有小说《命若琴弦》等，散文《我与地坛》《合欢树》等。</span></div>
+      <div class="opt"><b>B．</b><span>谦称是表示谦逊的自称，敬称是尊敬对方的称谓。谦称的词语只能用于称呼自己，尊称的词语只能用于称呼对方。</span></div>
+      <div class="opt"><b>C．</b><span>《从百草园到三味书屋》选自散文集《朝花夕拾》。作者鲁迅，原名周树人，文学家、思想家、革命家。</span></div>
+      <div class="opt correct"><b>D．</b><span>《天净沙·秋思》选自《全元散曲》，作者是元代的戏曲作家、散曲家马致远。"天净沙"是曲子的题目。</span></div>
+    </div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext"><p><b>D</b>　"天净沙"是<b>曲牌名</b>，"秋思"才是题目。</p></div>
+      <div class="anote"><b>批注</b>曲牌名与题目务必分清：《天净沙·秋思》＝曲牌"天净沙"＋题目"秋思"。</div>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">6</span><span class="kind">书写</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">把毛主席为鲁迅先生的题词"横眉冷对千夫指，俯首甘为孺子牛"用楷书规范工整地抄写下来。</div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext"><p>横眉冷对千夫指，俯首甘为孺子牛。</p></div>
+      <div class="anote"><b>批注</b>手写要点：①楷书，字字独立、笔画到位；②"孺"字注意"雨"字头下"而"的写法；③两句之间用逗号，句末句号；④写在格子中央，不连笔、不涂改。</div>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">7</span><span class="kind">对联</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">请用下面的 4 个词语组成一副对联：花香　室雅　不在多　何须大</div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext"><p>上联：<b>室雅何须大</b>　下联：<b>花香不在多</b></p></div>
+      <div class="anote"><b>批注</b>对联规则：仄起平收——上联末字"大"（仄声），下联末字"多"（平声）；词性相对（室—花、雅—香）。</div>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">8</span><span class="kind">名著人物</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">根据《朝花夕拾》中的白描写出对应的人名："她生得黄胖而矮……我家有个女工，身材生得很高大。"</div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext"><p><b>阿长（长妈妈）</b></p></div>
+      <div class="anote"><b>批注</b>这是《阿长与〈山海经〉》中的白描："黄胖而矮"是阿长，"身材生得很高大"是远房叔祖家的女工，用来对比。</div>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">9</span><span class="kind">名著常识</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">下列表述与《朝花夕拾》原著不相符的一项是（　）</div>
+    <div class="opts wide">
+      <div class="opt"><b>A．</b><span>《朝花夕拾》的"朝"是早上的意思，"夕"是晚上的意思。书名的意思是早上的花晚上来捡，就是成年时回忆往事。</span></div>
+      <div class="opt correct"><b>B．</b><span>《朝花夕拾》是鲁迅先生最具代表性的小说集，主要记录了作者从幼年到青年的生活道路和心路历程，富有生活情趣。</span></div>
+      <div class="opt"><b>C．</b><span>《狗·猫·鼠》是针对"正人君子"的攻击引发的，表达了对猫一类暴虐者的憎恶，对隐鼠一类弱小者的同情。</span></div>
+      <div class="opt"><b>D．</b><span>《从百草园到三味书屋》是一曲谱写幼年往事的优美乐章。作者以如诗的笔触舒卷自如地为人们描绘了一个妙趣横生的童心世界。</span></div>
+    </div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext"><p><b>B</b>　《朝花夕拾》是<b>散文集</b>（回忆性散文），不是小说集。</p></div>
+      <div class="anote"><b>批注</b>鲁迅小说集是《呐喊》《彷徨》《故事新编》；散文集是《朝花夕拾》；散文诗集是《野草》。</div>
+    </div>
+  </div>
+
+  <div class="part">第二部分　阅读与鉴赏（一）课文节选</div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">10</span><span class="kind">内容理解</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">下列对文章的理解和分析，不正确的一项是（　）</div>
+    <div class="opts wide">
+      <div class="opt"><b>A．</b><span>选文从视觉、听觉、味觉等角度描写百草园的景物，充满趣味。</span></div>
+      <div class="opt"><b>B．</b><span>"不必说……也不必说……单是……"这一句式突出百草园趣味之多。</span></div>
+      <div class="opt correct"><b>C．</b><span>捕鸟是在"拍雪人"和"塑罗汉"都不相宜的情况下进行的，因此没什么乐趣。</span></div>
+      <div class="opt"><b>D．</b><span>作者用"Ade，我的蟋蟀们！……"这样的句子，抒发了对百草园的依恋与不舍。</span></div>
+    </div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext"><p><b>C</b>　捕鸟虽是退而求其次的选择，却写得兴味盎然（"便罩住了""费了半天力"），恰恰表现冬日活动之趣，绝非"没什么乐趣"。</p></div>
+      <div class="anote"><b>批注</b>常考陷阱：把"不得不"的活动说成"无趣"，忽略了作者笔下捕鸟的兴奋与期待。</div>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">11</span><span class="kind">结构 · 概括</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">选文第①段画横线句子在结构上起什么作用？并简要概括泥墙根一带有趣味的事（每件事不超过 4 个字）。</div>
+    <div class="quote">画横线句：单是周围的短短的泥墙根一带，就有无限趣味。</div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext">
+        <p>结构作用：<b>承上启下（过渡）</b>——由上文的概括描写（"不必说……也不必说……"）转入下文的局部具体描写，同时<b>总领</b>下文泥墙根一带的趣事。</p>
+        <p>趣事：<b>听虫鸣</b>（油蛉低唱、蟋蟀弹琴）、<b>找蜈蚣</b>、<b>按斑蝥</b>（斑蝥喷烟）、<b>拔何首乌</b>、<b>摘覆盆子</b>。</p>
+      </div>
+      <div class="anote"><b>批注</b>"单是……就……"是典型的"以点带面"句式，结构作用答"过渡＋总领"；概括趣事要压缩到4字以内并保持动宾结构。</div>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">12</span><span class="kind">句子赏析</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">请赏析选文第②段画线句子的表达效果。</div>
+    <div class="quote">扫开一块雪，露出地面，用一枝短棒支起一面大的竹筛来，下面撒些秕谷，棒上系一条长绳，人远远地牵着……将绳子一拉，便罩住了。</div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext"><p>①运用<b>一系列动词</b>（扫、露、支、撒、系、牵、拉、罩），构成连续的动作描写，准确、生动地写出捕鸟的全过程，层次清晰、画面感强；②"远远地牵着""一拉"写出捕鸟时的紧张与期待，表现儿童专注、兴奋的情态和百草园冬日的乐趣；③语言质朴而富有童趣，体现作者对童年生活的怀念。</p></div>
+      <div class="anote"><b>批注</b>动作描写赏析的答题公式："动词＋动作过程＋人物情态／效果＋情感"。注意不要漏掉"过程清晰、有画面感"。</div>
+    </div>
+  </div>
+
+  <div class="part">（二）《百草园的月色》　陈忠实</div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">13</span><span class="kind">梳理表格</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">阅读文章，完成下面的表格。</div>
+    <div class="quote">不同情境下的"百草园"　｜　特点　｜　情感<br>①____________　｜　朦朦胧胧　｜　满足<br>　｜　②____________　｜　<br>"我"心中的百草园　｜　｜　向往<br>　｜　③____________　｜　④____________<br>黄土高原之中的南坡　｜　｜　</div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext">
+        <p>① <b>月色中的百草园（眼前的百草园）</b></p>
+        <p>② <b>趣味无穷（生机勃勃、妙趣横生）</b></p>
+        <p>③ <b>生机盎然（野趣十足、热闹有趣）</b></p>
+        <p>④ <b>依恋（怀念、眷恋）</b></p>
+      </div>
+      <div class="anote"><b>批注</b>表格三行分别对应"眼前实景／课文印象／家乡记忆"，情感线索是"满足—向往—依恋"，特点都写"有生机、有趣"。</div>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">14</span><span class="kind">动词品味</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">请分析下面加点动词的表达效果："听陇音普通话朗诵'百草园'的时候，才一下子<b>戳开</b>了记忆的窗户。"</div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext"><p>"戳开"本义是用尖的东西捅开，这里化抽象为具体，把"记忆"写成可以"戳开"的窗户，生动形象地写出陇音普通话朗读课文的一瞬间，突然唤醒了"我"沉睡多年的童年记忆；一个"戳"字写出记忆被猛然打开时的突然、鲜活与惊喜，也见出怀念之深。</p></div>
+      <div class="anote"><b>批注</b>动词赏析公式：本义→语境义（化抽象为具体）→写出什么情态→表达什么情感。</div>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">15</span><span class="kind">标题妙处</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">结合文章内容，说说文章题目《百草园的月色》有何妙处。</div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext">
+        <p>①点明写作对象与特定环境——月色中的百草园，交代了游览的时间与氛围；</p>
+        <p>②"月色"与文中反复出现的"朦朦胧胧"相呼应，营造朦胧、静谧、梦幻的意境，也象征记忆的朦胧美好；</p>
+        <p>③以景为题，含蓄蕴藉，寄托对先生的崇敬、对百草园的向往和对童年故乡的深切怀念，富有诗意。</p>
+      </div>
+      <div class="anote"><b>批注</b>标题妙处＝"点明对象＋营造意境＋寄托情感（＋结构线索）"。</div>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">16</span><span class="kind">开放探究</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">读到文章结尾，两位同学展开了讨论。你赞同哪种意见？说说你的看法。</div>
+    <div class="quote">结尾：哦！我的向往中的南国的先生的百草园！／哦！我的遥远的北方家乡的黄土高原之中的南坡……</div>
+    <div class="ans">
+      <span class="alab">答案（示例）</span>
+      <div class="atext"><p>我赞同"结尾并非多余，而是深化了主题"这一意见。结尾由先生的百草园转向"我的百草园"——家乡黄土高原的南坡，把"向往他人笔下的童年"与"怀念自己的童年"合并为一：每个人心中都有一个属于自己的"百草园"。两个"哦"反复咏叹，情感层层推进，既表达对先生的敬意，又抒发对童年、对故乡的深情，余味悠长，使文章立意更高。</p><p class="alt">（若赞同"结尾偏题"，可答：文章既题为《百草园的月色》，结尾却写北方家乡，笔势旁逸；但结合全文"由景及忆"的思路看，这样收束更自然。）</p></div>
+      <div class="anote"><b>批注</b>开放题先明确立场，再从"内容、情感、结构（卒章显志）"三方面论证。</div>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">17</span><span class="kind">写法比较</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">选文第⑨段画波浪线的句子与课文链接中的句子，都以儿童视角描写儿时眼中生机勃勃、情趣盎然的生活环境。请简要分析其中景物描写方法的异同。</div>
+    <div class="quote">【课文链接】不必说碧绿的菜畦，光滑的石井栏……轻捷的叫天子（云雀）忽然从草间直窜向云霄里去了。</div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext">
+        <p><b>同</b>：①都以儿童视角、按一定的观察顺序（由高到低、由远及近）描写；②都抓住景物的色彩、形态、动作特征（"碧绿""紫红""肥胖""轻捷"）；③都运用拟人等手法，语言生动，充满童趣，表现对童年生活的喜爱。</p>
+        <p><b>异</b>：课文链接用"不必说……也不必说……单是……"的句式，<b>先概括后具体（点面结合）</b>，从视觉、听觉多角度展现百草园的趣味；选文则把景物与<b>儿童的具体活动</b>（捕捉蚂蚱、"忘了吃饭""顾不得喝水"）结合，以事写景，更突出游戏之乐和北方高原特有的风光。</p>
+      </div>
+      <div class="anote"><b>批注</b>比较题要"同中求异"：手法相同（儿童视角、多感官、拟人），结构/侧重点不同（点面结合 vs 以事写景）。</div>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">18</span><span class="kind">情感比较</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">本文和《从百草园到三味书屋》都对"百草园"进行了描写。请结合相关内容，简析两篇文章所表达的情感。</div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext">
+        <p>《从百草园到三味书屋》：借百草园自由快活的生活与三味书屋的拘束形成对比，表达对童年生活的深切怀念，也暗含对束缚儿童身心发展的封建教育的不满。</p>
+        <p>《百草园的月色》：写"我"在月色中走进向往了近三十年的百草园，由眼前朦胧景物引发对课文、对童年家乡"南坡"的回忆，表达对先生的崇敬、对百草园的向往，以及人到中年回望童年时的依恋与感慨。</p>
+      </div>
+      <div class="anote"><b>批注</b>两文都有"怀念童年"，但课文多一层"批判封建教育"，本文多一层"中年回望的沧桑与乡愁"，这是答题的区分点。</div>
+    </div>
+  </div>
+</section>
+<!-- ============ L5 论语十二章 ============ -->
+<section class="lesson" id="L5">
+  <div class="lhead">
+    <span class="lnum">UNIT 8 · 05</span>
+    <h2>《〈论语〉十二章》课后作业单</h2>
+    <span class="tag2">孔子及其弟子 · 语录体</span>
+  </div>
+
+  <div class="part">第一部分　积累与运用</div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">1</span><span class="kind">字音 · 字形</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">根据拼音写汉字或给加点字注音。</div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext">
+        <p>（1）学而不思则 <b>罔</b>（wǎng），思而不学则 <b>殆</b>（dài）。</p>
+        <p>（2）不亦 <b>说</b>乎（<b>yuè</b>）　吾日三 <b>省</b>吾身（<b>xǐng</b>）</p>
+        <p>（3）<b>传</b>不习乎（<b>chuán</b>）　一 <b>箪</b>食（<b>dān</b>）　一 <b>瓢</b>饮（<b>piáo</b>）</p>
+        <p>（4）逝者如斯 <b>夫</b>（<b>fú</b>）　不 <b>逾</b>矩（<b>yú</b>）　<b>好</b>之者（<b>hào</b>）</p>
+        <p>（5）曲 <b>肱</b> 而枕之　博学而 <b>笃</b> 志</p>
+        <p>（6）人不知而不 <b>愠</b>　学而时 <b>习</b>之（<b>xí</b>）</p>
+      </div>
+      <div class="anote"><b>批注</b>易错音："说"通"悦"读 yuè；"省"读 xǐng（反省）；"好"读 hào（爱好）；"夫"读 fú（语气词）。</div>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">2</span><span class="kind">实词解释</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">解释下列句中加点的文言实词。</div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext">
+        <p>（1）愠：<b>生气，恼怒</b>。</p>
+        <p>（2）省：<b>自我检查、反省</b>。</p>
+        <p>（3）罔：<b>迷惑（迷茫而无所适从）</b>。</p>
+        <p>（4）殆：<b>疑惑</b>。</p>
+        <p>（5）可以（为师矣）：<b>可以凭借（这一点）</b>。</p>
+        <p>（6）逾矩：<b>越过规矩</b>。</p>
+        <p>（7）好：<b>喜爱，爱好</b>；乐：<b>以……为快乐</b>。</p>
+        <p>（8）饭疏食：<b>吃粗粮</b>（饭：吃；疏食：粗糙的饭食）。</p>
+        <p>（9）逝：<b>往，离去</b>。</p>
+        <p>（10）夺：<b>改变（夺取）</b>。</p>
+        <p>（11）笃：<b>坚定</b>。</p>
+        <p>（12）切：<b>恳切</b>。</p>
+      </div>
+      <div class="anote"><b>批注</b>"罔"与"殆"常被混：罔＝迷惑（学了不思考），殆＝疑惑（思了不学）。"饭"是名词作动词（吃）。</div>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">3</span><span class="kind">虚词</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">下列句子中加点的虚词，意义和用法相同的一项是（　）</div>
+    <div class="opts wide">
+      <div class="opt"><b>A．</b><span>学<b>而</b>时习之／学<b>而</b>不思则罔</span></div>
+      <div class="opt"><b>B．</b><span>人不知<b>而</b>不愠／择其善者<b>而</b>从之</span></div>
+      <div class="opt"><b>C．</b><span>可<b>以</b>为师矣／<b>以</b>刀劈狼首</span></div>
+      <div class="opt correct"><b>D．</b><span>仁在<b>其</b>中矣／<b>其</b>不善者而改之</span></div>
+    </div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext"><p><b>D</b>　两句中的"其"都是<b>代词</b>（用法相同）。A 前一"而"表顺承，后一"而"表转折；B 前一"而"表转折，后一"而"表顺承；C 前一"以"为"凭借"，后一"以"为"用"。</p></div>
+      <div class="anote"><b>批注</b>虚词比较先看"词性/用法"再看"意义"。D 项两"其"均为代词，是本题唯一用法相同的一组。</div>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">4</span><span class="kind">通假字</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">下列句子中没有通假字的一项是（　）</div>
+    <div class="opts wide">
+      <div class="opt"><b>A．</b><span>不亦说乎</span></div>
+      <div class="opt"><b>B．</b><span>吾十有五而志于学</span></div>
+      <div class="opt correct"><b>C．</b><span>思而不学则殆</span></div>
+      <div class="opt"><b>D．</b><span>尊君在不</span></div>
+    </div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext"><p><b>C</b>　A"说"同"悦"；B"有"同"又"；D"不"同"否"。只有 C 无通假。</p></div>
+      <div class="anote"><b>批注</b>通假字总结："说—悦""有—又""不—否"，均为高频考点。</div>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">5</span><span class="kind">朗读节奏</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">下列句子朗读节奏划分不正确的一项是（　）</div>
+    <div class="opts wide">
+      <div class="opt"><b>A．</b><span>人不知／而不愠</span></div>
+      <div class="opt"><b>B．</b><span>温故／而知新，可以／为师矣</span></div>
+      <div class="opt correct"><b>C．</b><span>择其／善者／而从之</span></div>
+      <div class="opt"><b>D．</b><span>三军／可夺帅也，匹夫／不可夺志也</span></div>
+    </div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext"><p><b>C</b>　应为"择／其善者／而从之"，"择"是谓语，后面带宾语"其善者"，不能读成"择其／善者"。</p></div>
+      <div class="anote"><b>批注</b>节奏划分原则：不破词、不断句，主谓之间可停，动宾之间不停。</div>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">6</span><span class="kind">默写</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">按要求默写句子。</div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext">
+        <p>（1）阐述"学"与"思"辩证关系：<b>学而不思则罔，思而不学则殆</b>。</p>
+        <p>（2）别人不了解甚至误解自己时应取的态度：<b>人不知而不愠，不亦君子乎</b>？</p>
+        <p>（3）感叹时光易逝、勉励珍惜时间求学：<b>逝者如斯夫，不舍昼夜</b>。</p>
+        <p>（4）复习的意义：<b>温故而知新，可以为师矣</b>。</p>
+        <p>（5）兴趣对学习的重要性：<b>知之者不如好之者，好之者不如乐之者</b>。</p>
+        <p>（6）与"三人行，必有我师焉"意思相近：<b>择其善者而从之，其不善者而改之</b>。</p>
+      </div>
+      <div class="anote"><b>批注</b>（2）易漏"不亦君子乎"的反问语气与标点；（6）不要填课外名句"见贤思齐"（不在十二章内）。</div>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">7</span><span class="kind">成语积累</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">从《〈论语〉十二章》中找出至今沿用的成语，不少于四个。</div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext"><p><b>温故知新、三省吾身、三十而立、择善而从</b>（也可写：不亦乐乎、三人行必有我师、不舍昼夜、匹夫不可夺志、随心所欲、不惑之年）。</p></div>
+      <div class="anote"><b>批注</b>必须出自本课十二章，不能写"不耻下问""学而不厌"（不在本文）。</div>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">8</span><span class="kind">文学常识</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">文学常识填空。</div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext">
+        <p>（1）《论语》是<b>儒</b>家经典著作，是记录<b>孔子</b>及其弟子言行的语录体散文，共 20 篇。</p>
+        <p>（2）孔子，名<b>丘</b>，字<b>仲尼</b>，<b>春秋</b>时期鲁国人，我国古代伟大的<b>思想</b>家、<b>教育</b>家。</p>
+        <p>（3）南宋朱熹把《论语》《<b>孟子</b>》《<b>大学</b>》《<b>中庸</b>》合称"四书"。</p>
+      </div>
+      <div class="anote"><b>批注</b>"四书"顺序：论语、孟子、大学、中庸；孔子的"名丘字仲尼"是必考点。</div>
+    </div>
+  </div>
+
+  <div class="part">第二部分　阅读与鉴赏（一）课内十二章</div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">9</span><span class="kind">句子翻译</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">用现代汉语翻译下列句子。</div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext">
+        <p>（1）温故而知新，可以为师矣。—— 温习学过的知识，从而得到新的理解和体会，就可以凭借（这一点）做老师了。</p>
+        <p>（2）学而不思则罔，思而不学则殆。—— 只学习却不思考，就会迷惑；只思考却不学习，就会疑惑（有害）。</p>
+        <p>（3）择其善者而从之，其不善者而改之。—— 选择他们的优点来学习，（看到）他们的缺点就（对照自己）加以改正。</p>
+      </div>
+      <div class="anote"><b>批注</b>"可以"是"可以凭借"，不能译成"能够"；"善者"译"优点/长处"。</div>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">10</span><span class="kind">内容理解</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">下列对选文内容理解不正确的一项是（　）</div>
+    <div class="opts wide">
+      <div class="opt"><b>A．</b><span>"学而时习之"谈的是学习方法，强调时常复习的重要性。</span></div>
+      <div class="opt"><b>B．</b><span>"吾日三省吾身"是曾子的话，强调自我反省在品德修养中的作用。</span></div>
+      <div class="opt correct"><b>C．</b><span>"不义而富且贵，于我如浮云"，意思是说富贵是天上的浮云，可望而不可即。</span></div>
+      <div class="opt"><b>D．</b><span>"三军可夺帅也，匹夫不可夺志也"，强调了坚定志向对一个人的重要性。</span></div>
+    </div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext"><p><b>C</b>　原意是：用不正当手段得来的富贵，对我就像天上的浮云一样（毫无意义、不屑一顾）；不是"可望而不可即"。</p></div>
+      <div class="anote"><b>批注</b>此句关键词是"不义"，强调"取之有道"，体现安贫乐道的品格。</div>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">11</span><span class="kind">内容理解</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">"有朋自远方来，不亦乐乎？"中"朋"指什么样的人？为什么孔子会"乐"？</div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext"><p>"朋"指<b>志同道合的人</b>（有共同志向、能一起研讨学问的人）。因为这样的人从远方而来，与自己切磋学问、交流思想，既是学问上的收获，也是精神上的相知，是难得而珍贵的乐事，所以"乐"。</p></div>
+      <div class="anote"><b>批注</b>"朋"≠普通朋友，古文里强调"同门曰朋、同志曰友"，核心是"志同道合"。</div>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">12</span><span class="kind">观点理解</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">结合"知之者不如好之者，好之者不如乐之者"，谈谈你对"乐之"这一境界的理解。</div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext"><p>"乐之"是<b>以学习为快乐</b>，是三层境界中最高的一层：由"知"（知道）到"好"（喜爱）再到"乐"（乐在其中）。把学习当作乐趣，就会主动、持久地投入，遇到困难也不以为苦，学习效率与收获自然最高。这也启示我们：培养兴趣，是学有所成的关键。</p></div>
+      <div class="anote"><b>批注</b>答题要体现"三层递进（知—好—乐）"，并落到"兴趣是最好的老师"。</div>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">13</span><span class="kind">内容理解</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">"饭疏食，饮水，曲肱而枕之，乐亦在其中矣。"请说说这里的"乐"是一种怎样的快乐？体现了孔子怎样的人生态度？</div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext"><p>这是<b>安于清贫、以道（义）为乐</b>的精神之乐：吃粗粮、喝冷水、弯着胳膊当枕头，物质极简，内心却充实愉悦，不为富贵所动。体现了孔子<b>安贫乐道</b>、重义轻利、乐观豁达的人生态度。</p></div>
+      <div class="anote"><b>批注</b>"乐"不是苦中作乐的自我安慰，而是"以道义为乐"的主动选择，要与"不义而富且贵，于我如浮云"合看。</div>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">14</span><span class="kind">拓展感悟</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">孔子认为"三人行，必有我师焉"，你认为这是一种怎样的学习态度？对我们有什么启发？</div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext"><p>这是一种<b>谦虚好学、善于向他人学习</b>的态度：不轻视任何人，善于发现别人的长处并学习，看到别人的缺点则反省自身、加以改正。启发：学习不分对象、不分场合，人人皆可为师；要虚心、善学、取长补短，切忌自满。</p></div>
+      <div class="anote"><b>批注</b>答"启发"要具体：可举"同学之间互相学习""从批评中改进"等例子。</div>
+    </div>
+  </div>
+
+  <div class="part">（二）课外文言文《孔子学琴》</div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">15</span><span class="kind">词语解释</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">解释下列句中加点的词：（1）可以益矣（　）（2）有所怡然高望而远志焉（　）</div>
+    <div class="ans"><span class="alab">答案</span><div class="atext"><p>（1）益：<b>增加（指增加新的学习内容）</b>。（2）怡然：<b>喜悦、安适愉快的样子</b>。</p></div><div class="anote"><b>批注</b>注释已给"进：前进，指继续学新的内容"，"益"与之呼应，译为"增加（学新内容）"。</div></div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">16</span><span class="kind">句子翻译</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">非文王其谁能为此也！</div>
+    <div class="ans"><span class="alab">答案</span><div class="atext"><p>除了文王，还有谁能作出这样的曲子呢！（不是文王，难道还有谁能作出这样的曲子吗！）</p></div><div class="anote"><b>批注</b>"其谁"是反问语气，"非……其谁"＝"除了……还有谁"，要译出反问的强烈语气。</div></div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">17</span><span class="kind">信息概括</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">孔子学琴经历了哪几个阶段？请用原文词语概括。</div>
+    <div class="ans"><span class="alab">答案</span><div class="atext"><p><b>习其曲 → 得其数 → 得其志 → 得其为人</b>（由曲调，到节奏技巧，到曲中情志，再到作曲者的人格）。</p></div><div class="anote"><b>批注</b>四阶段层层深入，体现"由表及里、由技入神"的求学过程。</div></div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">18</span><span class="kind">综合探究</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">结合选文和课文《〈论语〉十二章》，说说孔子在学习上有哪些值得我们借鉴的态度或方法。</div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext">
+        <p>①<b>精益求精、学而不厌</b>：学琴"十日不进"，不满足于初步掌握，反复揣摩（"习其曲""得其数""得其志""得其为人"）。</p>
+        <p>②<b>专注深入、由表及里</b>：从曲调到技巧到情志再到人格，层层深入，与"学而不思则罔"的"思"相通。</p>
+        <p>③<b>谦虚尊师、以学为乐</b>：虚心向师襄子求教，师襄子"辟席再拜"；与"知之者不如好之者，好之者不如乐之者"一致。</p>
+        <p>④<b>温故知新</b>：反复练习旧曲而每有新得，正合"温故而知新"。</p>
+      </div>
+      <div class="anote"><b>批注</b>课内外结合题要"两文互证"：每一条都要既有选文依据，又有《论语》名句支撑。</div>
+    </div>
+  </div>
+
+  <div class="part">综合性学习</div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">19</span><span class="kind">综合运用</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">（1）拟写标语（至少一种修辞，不超过 20 字）；（2）仿写感悟；（3）观点辨析。</div>
+    <div class="ans">
+      <span class="alab">答案（示例）</span>
+      <div class="atext">
+        <p>（1）<b>与经典同行，和孔子对话。</b>（对偶、拟人，12 字）　或：<b>让《论语》的智慧照亮青春。</b>（比喻）</p>
+        <p>（2）我选"三人行，必有我师焉"。身边每个人都有值得学习的长处，只要虚心求教、善于反省，就能不断进步。做一个谦虚的学习者，才能在与人相处中收获成长。</p>
+        <p>（3）<b>不同意</b>。《论语》虽写于两千多年前，但其中的学习方法（学而时习、温故知新、学思结合）、学习态度（谦虚好问、以学为乐）和修身之道（三省吾身、安贫乐道）至今仍能指导我们的学习与做人；当然，我们应结合时代"取其精华"，而不是全盘照搬。所以它对今天的中学生依然有实际意义。</p>
+      </div>
+      <div class="anote"><b>批注</b>（1）务必标出字数与修辞；（2）仿写要"引原句＋讲道理＋落行动"；（3）辨析题先亮观点，再分"学习方法／态度／修身"举证。</div>
+    </div>
+  </div>
+</section>
+<!-- ============ L6 诫子书 ============ -->
+<section class="lesson" id="L6">
+  <div class="lhead">
+    <span class="lnum">UNIT 8 · 06</span>
+    <h2>《诫子书》课后作业单</h2>
+    <span class="tag2">诸葛亮 · 家书（说理散文）</span>
+  </div>
+
+  <div class="part">第一部分　积累与运用</div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">1</span><span class="kind">字音 · 字形</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">给加点字注音或根据拼音写汉字。</div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext">
+        <p>淡泊（<b>bó</b>）　　淫慢（<b>yín</b>）　　险躁（<b>zào</b>）　　晦明（<b>huì</b>）</p>
+        <p>穷庐（<b>lú</b>）　　勉（<b>miǎn</b>）　　励精（<b>lì</b>）　　遂成枯落（<b>suì</b>）</p>
+        <p>夫君子之行（<b>fú</b>）　　悲守穷庐（<b>lú</b>）　　淫慢则不能励精（<b>màn</b>＝慢）</p>
+      </div>
+      <div class="anote"><b>批注</b>"淫慢"的"慢"不是错字，就是"慢"（懈怠）；"夫"作发语词读 fú。</div>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">2</span><span class="kind">实词解释</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">解释下列句中加点的文言词。</div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext">
+        <p>（1）静以修身：静：<b>屏除杂念和干扰，宁静专一</b>。</p>
+        <p>（2）非学无以广才：广：<b>增长</b>。</p>
+        <p>（3）淫慢则不能励精：淫：<b>放纵</b>；励：<b>振奋</b>。</p>
+        <p>（4）险躁则不能治性：险：<b>轻薄</b>；治：<b>修养</b>。</p>
+        <p>（5）年与时驰：驰：<b>疾行，指迅速逝去</b>。</p>
+        <p>（6）将复何及：复：<b>再</b>；及：<b>来得及</b>。</p>
+      </div>
+      <div class="anote"><b>批注</b>"淫"不是"淫乱"而是"放纵"；"险"不是"危险"而是"轻薄（浮躁）"；"治"是"修养"，不是"治理"。</div>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">3</span><span class="kind">节奏划分</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">下列句子朗读停顿划分有误的一项是（　）</div>
+    <div class="opts wide">
+      <div class="opt"><b>A．</b><span>夫／君子之行，静／以修身，俭／以养德。</span></div>
+      <div class="opt"><b>B．</b><span>非淡泊／无以明志，非宁静／无以致远。</span></div>
+      <div class="opt correct"><b>C．</b><span>非学无／以广才，非志无／以成学。</span></div>
+      <div class="opt"><b>D．</b><span>年与／时驰，意与／日去。</span></div>
+    </div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext"><p><b>C</b>　应为"非学／无以广才，非志／无以成学"，"无以"（没有办法）不能拆开。</p></div>
+      <div class="anote"><b>批注</b>"无以"是固定结构，意为"没有什么可以用来……"，必须连读。</div>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">4</span><span class="kind">文意理解</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">下列对文章内容理解有误的一项是（　）</div>
+    <div class="opts wide">
+      <div class="opt"><b>A．</b><span>本文是诸葛亮写给儿子的一封家书，主旨是劝勉儿子修身养德、立志勤学。</span></div>
+      <div class="opt"><b>B．</b><span>"非淡泊无以明志，非宁静无以致远"从反面强调淡泊、宁静对志向的重要。</span></div>
+      <div class="opt correct"><b>C．</b><span>文中"淫慢""险躁"是作者所提倡的两种修身方法。</span></div>
+      <div class="opt"><b>D．</b><span>"年与时驰，意与日去"警示儿子要珍惜年华、及时努力。</span></div>
+    </div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext"><p><b>C</b>　"淫慢"（放纵懈怠）、"险躁"（轻薄浮躁）是作者所<b>反对</b>的，且原文用"则不能励精""则不能治性"明确指出其危害。</p></div>
+      <div class="anote"><b>批注</b>注意"反面立论"的写法：作者多用"非……无以……""……则不能……"，从反面说理，反而更有力。</div>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">5</span><span class="kind">内容概括</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">诸葛亮在文中提出了哪几个方面的要求？请简要概括。</div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext"><p>①<b>修身养德</b>：静以修身，俭以养德，淡泊明志，宁静致远；②<b>立志勤学</b>：非学无以广才，非志无以成学；③<b>戒淫慢险躁</b>：不能放纵懈怠、轻薄浮躁；④<b>惜时</b>：珍惜年华，"年与时驰，意与日去"，莫待"枯落"而"悲守穷庐"。</p></div>
+      <div class="anote"><b>批注</b>概括可从"修身—立志—治学—惜时"四条梳理，与原文顺序一致（修身→治学→戒躁→惜时）。</div>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">6</span><span class="kind">词类活用</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">指出下列加点词的活用现象并解释。</div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext">
+        <p>①非淡泊无以<b>明</b>志：<b>形容词的使动用法</b>，使……明确（使志向明确）。</p>
+        <p>②非宁静无以<b>远</b>：<b>形容词作名词</b>，<b>远大目标</b>（远大的境界）。</p>
+        <p>③非学无以<b>广</b>才：<b>形容词作动词</b>，<b>增长</b>。</p>
+        <p>④非志无以<b>成</b>学：一说"志"为<b>名词作动词</b>，<b>立志</b>；"成"为使动"使……成就"。</p>
+      </div>
+      <div class="anote"><b>批注</b>"明"多考"使动"，"远"多考"形作名"，"广"多考"形作动"，三者是本文活用三大高频点。</div>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">7</span><span class="kind">句子翻译</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">用现代汉语翻译下列句子。</div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext">
+        <p>（1）静以修身，俭以养德。—— 用宁静专一来修养身心，用节俭来培养品德。</p>
+        <p>（2）非淡泊无以明志，非宁静无以致远。—— 不能内心恬淡、不慕名利，就没有办法明确志向；不能宁静专一，就没有办法达到远大目标。</p>
+        <p>（3）淫慢则不能励精，险躁则不能治性。—— 放纵懈怠就不能振奋精神，轻薄浮躁就不能修养性情。</p>
+        <p>（4）年与时驰，意与日去，遂成枯落。—— 年纪随同时光飞快逝去，意志随同岁月消磨，最终枯败零落。</p>
+      </div>
+      <div class="anote"><b>批注</b>（1）两个"以"是"用来"；（2）"淡泊"译"内心恬淡、不慕名利"；（4）"驰"是"疾行、迅速逝去"。</div>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">8</span><span class="kind">默写</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">根据提示默写。</div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext">
+        <p>（1）表明志向与淡泊、宁静关系的句子：<b>非淡泊无以明志，非宁静无以致远</b>。</p>
+        <p>（2）阐述学习与志向关系的句子：<b>非学无以广才，非志无以成学</b>。</p>
+        <p>（3）从反面说明放纵懈怠、轻薄浮躁危害的句子：<b>淫慢则不能励精，险躁则不能治性</b>。</p>
+      </div>
+      <div class="anote"><b>批注</b>默写易错字："淡泊"（不是"淡薄"）、"励精"（不是"厉精"）、"治性"（不是"志性"）。</div>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">9</span><span class="kind">综合性学习</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">班级开展"家风家训"主题活动，请你参与：（1）拟宣传标语；（2）就"传统家训在今天是否还适用"发表看法；（3）写一个 70 字左右的小故事。</div>
+    <div class="ans">
+      <span class="alab">答案（示例）</span>
+      <div class="atext">
+        <p>（1）<b>好家风，代代传</b>（或：<b>家风正则家道兴，家训明则子孙贤</b>。）</p>
+        <p>（2）<b>不同意奶奶的说法</b>。传统家训中"俭以养德""静以修身""立志勤学""惜时"等道理，是放之古今皆准的做人根本；今天物质条件好了，节省一两米虽不必刻意，但"节俭"所指向的不浪费、知感恩、肯自律，恰恰是当下更需要培养的品质。我们应"取其精华"，让家训在新时代有了新的表现方式。</p>
+        <p>（3）<b>示例</b>：爷爷书房有本旧家训，其中"勤""俭"二字被红笔圈着。去年过年，我嫌年夜饭剩菜太多想倒掉，爷爷拦住我，把剩菜分装冷藏，第二天做成新菜。他说："俭不是省，是不辜负。"我第一次觉得，家训不是纸上的字，是每天的选择。（78 字）</p>
+      </div>
+      <div class="anote"><b>批注</b>（1）标语要有修辞、要有"家风"关键词；（2）观点必须明确（不同意），理由要"讲道理＋举例子"；（3）小故事要有具体人物、动作、一句点题的话。</div>
+    </div>
+  </div>
+
+  <div class="part">第二部分　阅读与鉴赏（一）【甲】《诫子书》</div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">10</span><span class="kind">一词多义</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">解释加点词：（1）非宁静无以<b>致</b>远（　）（2）险躁则不能<b>治</b>性（　）</div>
+    <div class="ans"><span class="alab">答案</span><div class="atext"><p>（1）致：<b>达到</b>。（2）治：<b>修养</b>。</p></div><div class="anote"><b>批注</b>"致远"＝达到远大目标（"致"不是"给予"）；"治性"＝修养性情（"治"不是"治理"）。</div></div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">11</span><span class="kind">句子翻译</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">翻译句子。</div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext">
+        <p>（1）非淡泊无以明志，非宁静无以致远。—— 不能内心恬淡、不慕名利，就没有办法明确志向；不能宁静专一，就没有办法达到远大目标。</p>
+        <p>（2）静以修身，俭以养德。—— 用宁静专一来修养身心，用节俭来培养品德。</p>
+      </div>
+      <div class="anote"><b>批注</b>两句是全文纲领，翻译时"以"字（用来）和"无以"（没有办法）必须译准。</div>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">12</span><span class="kind">论证分析</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">作者在文中反复提到"静"和"志"，请说说它们之间的关系，并简述"静"在文中的作用。</div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext"><p>关系：<b>静是志的前提，志是静的归宿</b>。只有"静"（宁静专一、内心淡泊），才能"明志""致远"；而立志又能使人保持专一，不为外物所扰，从而"成学""广才"。文中"静"是修身治学的基础：静以修身、宁静致远、静心求学，贯穿全文；与之相对的"淫慢""险躁"则从反面证明"静"之必要。</p></div>
+      <div class="anote"><b>批注</b>答"关系"要双向（静→志、志→静），答"作用"要落到"基础/前提"四字上，并能举反面"险躁"为证。</div>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">13</span><span class="kind">论点</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">本文的中心论点（作者对儿子的核心告诫）是什么？</div>
+    <div class="ans"><span class="alab">答案</span><div class="atext"><p><b>静以修身，俭以养德</b>（即要修身养德：以宁静专一修养身心，以节俭培养品德）。</p></div><div class="anote"><b>批注</b>《诫子书》开篇"夫君子之行，静以修身，俭以养德"即提出修身之道，是全文总纲；"非淡泊……"是进一步展开。</div></div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">14</span><span class="kind">内容理解</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">下列对【甲】文的理解不正确的一项是（　）</div>
+    <div class="opts wide">
+      <div class="opt"><b>A．</b><span>"夫君子之行，静以修身，俭以养德"提出修身养德的方法。</span></div>
+      <div class="opt"><b>B．</b><span>"非学无以广才，非志无以成学"说明学习与立志相辅相成。</span></div>
+      <div class="opt"><b>C．</b><span>"年与时驰，意与日去"流露出对儿子虚度光阴的担忧与告诫。</span></div>
+      <div class="opt correct"><b>D．</b><span>全文以"悲守穷庐，将复何及"作结，意在表达对儿子处境贫寒的同情。</span></div>
+    </div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext"><p><b>D</b>　结尾是<b>反面警示</b>：若虚度年华、无所成就，就只能悲凉地守着破屋，到那时再后悔也来不及了——意在<b>诫勉惜时</b>，而非"同情处境贫寒"。</p></div>
+      <div class="anote"><b>批注</b>"悲守穷庐"不是写家境，是写"不学无成"的结局。</div>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">15</span><span class="kind">句子翻译</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">翻译【乙】文中的句子。</div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext">
+        <p>（1）俭，德之共也；侈，恶之大也。—— 节俭，是各种美德共有的基础；奢侈，是各种罪恶中最大的。</p>
+        <p>（2）夫俭则寡欲，君子寡欲则不役于物。—— 节俭就会减少欲望，君子欲望少，就不会被外物役使（支配）。</p>
+      </div>
+      <div class="anote"><b>批注</b>"共"在此为"共有/共同的根本"，不是"共同"；"不役于物"是<b>被动句</b>（被外物役使）。</div>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">16</span><span class="kind">朗读节奏</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">请用"/"给句子划分朗读节奏（限两处）：淫慢则不能励精。</div>
+    <div class="ans"><span class="alab">答案</span><div class="atext"><p>淫慢／则不能／励精</p></div><div class="anote"><b>批注</b>断在"淫慢"（主语）之后、"则不能"（谓语部分）之后，"励精"作为一个动宾整体不拆。</div></div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">17</span><span class="kind">写作目的</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">结合【甲】文，说说诸葛亮写这封信的目的，以及这封信对后世的影响。</div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext"><p>目的：诸葛亮晚年写给儿子诸葛瞻，<b>告诫儿子修身养德、立志勤学、戒骄戒躁、珍惜年华</b>，希望他成为一个有德有才的君子（也寄托了对儿子的深切期望）。影响：全文仅八十余字，说理精警、情真意切，"静以修身，俭以养德""非淡泊无以明志，非宁静无以致远"等成为千古名句，被后世视为家训典范、修身格言，至今仍被广泛传诵和引用。</p></div>
+      <div class="anote"><b>批注</b>"目的"要含"写给谁＋告诫什么＋期望"；"影响"要落到"名句传世、家训典范"。</div>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">18</span><span class="kind">比较阅读</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">【甲】【乙】两文都谈"俭"，但侧重点不同，请简要分析。</div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext"><p>【甲】把"俭"与"静"并举，作为<b>修身养德的两大方法</b>（"静以修身，俭以养德"），并把它与"淡泊明志"相连，重在<b>个人修养与立志成才</b>。【乙】则从"俭，德之共也；侈，恶之大也"出发，论证<b>俭是众德的共同基础、奢是最大的恶</b>，并通过"寡欲—不役于物—可以直道而行"层层推论，重在<b>说明俭对于守德、立身、持家的根本意义</b>。</p></div>
+      <div class="anote"><b>批注</b>比较"侧重点"要各用一句话概括核心主张，再指出"甲偏修身立志，乙偏德之本源"。</div>
+    </div>
+  </div>
+
+  <div class="part">（三）课外文言文《炳烛之明》</div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">19</span><span class="kind">词义辨析</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">下列句中加点词的意义相同的一项是（　）</div>
+    <div class="opts wide">
+      <div class="opt"><b>A．</b><span>吾年七十<b>欲</b>学／<b>欲</b>穷其林</span></div>
+      <div class="opt"><b>B．</b><span>安有为人臣而<b>戏</b>其君乎／<b>戏</b>鸿儒</span></div>
+      <div class="opt correct"><b>C．</b><span>老而<b>好</b>学者／知之者不如<b>好</b>之者</span></div>
+      <div class="opt"><b>D．</b><span>孰<b>若</b>昧行乎／未<b>若</b>柳絮因风起</span></div>
+    </div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext"><p><b>C</b>　两句"好"都意为"<b>喜爱</b>"。A 前"欲"＝想要，后"欲"＝将要；B 前"戏"＝戏弄（开玩笑），后"戏"＝嬉戏（《狼》"一狼洞其中，意将隧入以攻其后也"，此指"戏"为"开玩笑"义，须据原文辨）；D 前"孰若"＝哪里比得上，后"未若"＝不如。</p></div>
+      <div class="anote"><b>批注</b>"好"读 hào，是本课与课文共同的"喜爱"义，最稳；其余三项均为"同形异义"。</div>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">20</span><span class="kind">内容理解</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">下列对文章内容的理解不正确的一项是（　）</div>
+    <div class="opts wide">
+      <div class="opt"><b>A．</b><span>师旷以"炳烛之明"作比，说明晚年学习仍有益处。</span></div>
+      <div class="opt"><b>B．</b><span>"安有为人臣而戏其君乎"写出晋平公对师旷的不满与责备。</span></div>
+      <div class="opt correct"><b>C．</b><span>师旷认为少年时学习如日出之阳，壮年时学习如日中之光，老年学习则毫无用处。</span></div>
+      <div class="opt"><b>D．</b><span>晋平公"善哉"的叹服，表明他接受了师旷的劝告。</span></div>
+    </div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext"><p><b>C</b>　师旷恰恰认为老年学习"炳烛之明"虽不如"日出之阳""日中之光"，但"孰若昧行乎"——总比在黑暗中摸索强，<b>晚年学习仍大有裨益</b>。</p></div>
+      <div class="anote"><b>批注</b>"炳烛"的比喻是"虽弱犹明"，不是"无用"；三个比喻（日出、日中、炳烛）构成层层递进的说理。</div>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">21</span><span class="kind">内容理解（多选）</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">下列对文章的分析，正确的两项是（　）（　）</div>
+    <div class="opts wide">
+      <div class="opt correct"><b>B．</b><span>师旷用三个比喻委婉劝谏，既保全君主颜面，又达到劝学目的，体现其机智善谏。</span></div>
+      <div class="opt correct"><b>C．</b><span>文章通过对话展开，语言简洁而含意深刻，说明"学不可以已"（学习不能停止）。</span></div>
+      <div class="opt"><b>A．</b><span>晋平公"吾年七十欲学，恐已暮矣"以"暮"喻年老，是全篇的文眼。</span></div>
+      <div class="opt"><b>D．</b><span>师旷"盲臣安敢戏其君乎"一句，说明他虽目盲却仍坚持学习。</span></div>
+    </div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext"><p><b>B、C</b>。A 项"文眼"表述不当（"暮"是切入点，而非全文文眼，且文章重点在"炳烛之明"）；D 项"盲臣"是师旷的自称（他是乐师，双目失明），并非"说明他仍坚持学习"。</p></div>
+      <div class="anote"><b>批注</b>多选题每个选项都要回原文找依据，考查"表述是否夸大/偷换"。</div>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">22</span><span class="kind">句子翻译</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">翻译句子：（1）吾年七十欲学，恐已暮矣。（2）少而好学，如日出之阳。</div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext"><p>（1）我七十岁了想要学习，恐怕已经晚了。（2）年少时喜爱学习，如同初升太阳的光明。</p></div>
+      <div class="anote"><b>批注</b>"暮"双关：既指"天色晚"，又指"年纪老"，翻译时要保留"晚（年老）"的意味。</div>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="num">23</span><span class="kind">启示探究</span><button class="btnans" data-act="toggle">看答案</button></div>
+    <div class="stem">从师旷劝学的故事中，你获得了哪些关于学习的启示？</div>
+    <div class="ans">
+      <span class="alab">答案</span>
+      <div class="atext"><p>①<b>学习要及早</b>：少年如"日出之阳"，精力最盛，应珍惜时光；②<b>晚学也不可弃</b>：老年学习如"炳烛之明"，虽弱犹明，总胜于"昧行"（不学）；③<b>学习应终身不倦</b>：活到老学到老，学习没有年龄上限；④<b>"晚学"胜于"不学"</b>：起步迟不是放弃的理由，只要开始就有光。这些都和《诫子书》"年与时驰，意与日去"的惜时告诫相通。</p></div>
+      <div class="anote"><b>批注</b>启示题分条作答，每条用"观点＋文中依据"，最后一问注意与课内《诫子书》勾连。</div>
+    </div>
+  </div>
+</section>
+<!-- ============ 尾部分片 ============ -->
+<style>
+  .lesson{scroll-margin-top:104px}
+  .footer-tip{max-width:920px;margin:46px auto 0;padding:14px 18px 0;border-top:1px solid var(--line);color:var(--ink3);font-size:12.5px;font-family:"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.8}
+  .backtop{position:fixed;right:22px;bottom:22px;z-index:40;width:42px;height:42px;border-radius:50%;display:none;align-items:center;justify-content:center;background:#fff;border:1px solid var(--line);box-shadow:0 4px 14px rgba(0,0,0,.10);font-size:16px;color:var(--ink2);cursor:pointer}
+  .backtop.on{display:flex}
+</style>
+
+<div class="footer-tip">以上为《U8 练习册》六篇课文全部题目参考答案与批注，共 100 余题。答案文字如与老师讲评不一致，以老师讲评为准。</div>
+</div><!-- /wrap -->
+
+<button class="backtop" id="backtop" title="回到顶部">↑</button>
+
+<script>
+(function(){
+  var body = document.body;
+  var stat = document.getElementById('stat');
+  var noteBtn = document.getElementById('noteBtn');
+  var qs = Array.prototype.slice.call(document.querySelectorAll('.q'));
+
+  function refresh(){
+    var n = document.querySelectorAll('.ans.show').length;
+    stat.textContent = n === 0 ? ('共 ' + qs.length + ' 题 · 已显示 0 题答案')
+                              : ('共 ' + qs.length + ' 题 · 已显示 ' + n + ' 题答案');
+    qs.forEach(function(q){
+      var a = q.querySelector('.ans'), b = q.querySelector('.btnans');
+      if(!a || !b) return;
+      b.textContent = a.classList.contains('show') ? '收起答案' : '看答案';
+      b.classList.toggle('opened', a.classList.contains('show'));
+    });
+  }
+
+  document.addEventListener('click', function(e){
+    var t = e.target.closest('[data-act]');
+    if(!t) return;
+    var act = t.getAttribute('data-act');
+
+    if(act === 'toggle'){
+      var q = t.closest('.q');
+      var a = q && q.querySelector('.ans');
+      if(a){ a.classList.toggle('show'); refresh(); }
+      return;
+    }
+    if(act === 'all'){
+      qs.forEach(function(q){ var a=q.querySelector('.ans'); if(a) a.classList.add('show'); });
+      refresh(); return;
+    }
+    if(act === 'none'){
+      qs.forEach(function(q){ var a=q.querySelector('.ans'); if(a) a.classList.remove('show'); });
+      refresh(); return;
+    }
+    if(act === 'notes'){
+      var on = body.classList.toggle('notes-on');
+      noteBtn.textContent = on ? '隐藏批注' : '显示批注';
+      return;
+    }
+  });
+
+  // 默认显示批注
+  body.classList.add('notes-on');
+  refresh();
+
+  // 回到顶部
+  var bt = document.getElementById('backtop');
+  window.addEventListener('scroll', function(){
+    bt.classList.toggle('on', window.scrollY > 600);
+  });
+  bt.addEventListener('click', function(){ window.scrollTo({top:0, behavior:'smooth'}); });
+
+  // 键盘快捷键：A 全部展开 / Esc 收起
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape'){ qs.forEach(function(q){var a=q.querySelector('.ans'); if(a) a.classList.remove('show');}); refresh(); }
+  });
+})();
+</script>
+</body>
+</html>
